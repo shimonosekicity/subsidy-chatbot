@@ -13,6 +13,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      padding-bottom: 64px; /* 固定ツールバー分の余白 */
     }
 
     header {
@@ -119,19 +120,39 @@
       font-size: 0.85rem;
     }
 
-    /* ── リセットボタン ── */
-    .reset-btn {
-      margin-top: 6px;
-      background: #f0f4f8;
-      border: 2px solid #aaa;
-      color: #555;
+    /* ── 操作ツールバー（常時表示） ── */
+    .toolbar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      padding: 10px 12px;
+      background: rgba(255,255,255,.97);
+      border-top: 1px solid #d5dde6;
+      box-shadow: 0 -2px 6px rgba(0,0,0,.06);
+    }
+    .nav-btn {
+      background: #fff;
+      border: 2px solid #1a56a0;
+      color: #1a56a0;
       border-radius: 24px;
-      padding: 8px 20px;
+      padding: 9px 18px;
       font-size: 0.88rem;
       cursor: pointer;
-      transition: background .15s;
+      transition: background .15s, color .15s, opacity .15s;
+      white-space: nowrap;
     }
-    .reset-btn:hover { background: #dde3ea; }
+    .nav-btn:hover:not(:disabled) { background: #1a56a0; color: #fff; }
+    .nav-btn.restart {
+      border-color: #888;
+      color: #555;
+    }
+    .nav-btn.restart:hover:not(:disabled) { background: #888; color: #fff; }
+    .nav-btn:disabled { opacity: 0.35; cursor: default; }
 
     footer {
       text-align: center;
@@ -154,6 +175,11 @@
 <div id="chat"></div>
 
 <footer>このチャットは下関市の補助金情報をご案内するものです。内容は参考情報であり、詳細は各担当窓口にお問い合わせください。</footer>
+
+<div class="toolbar">
+  <button id="backBtn" class="nav-btn" type="button">◀ 前の質問に戻る</button>
+  <button id="restartBtn" class="nav-btn restart" type="button">🔄 最初に戻る</button>
+</div>
 
 <script>
 // ── データ読み込み ──────────────────────────────────────────
@@ -198,11 +224,7 @@ function addChoices(choices, onSelect) {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
     btn.textContent = c.label;
-    btn.addEventListener('click', () => {
-      // 全ボタン無効化
-      div.querySelectorAll('.choice-btn').forEach(b => b.disabled = true);
-      onSelect(c);
-    });
+    btn.addEventListener('click', () => onSelect(c));
     div.appendChild(btn);
   });
   wrap.appendChild(div);
@@ -214,6 +236,14 @@ function addChoices(choices, onSelect) {
 function addResultCard(node) {
   const wrap = document.createElement('div');
   wrap.className = 'bubble-wrap bot';
+
+  // メッセージ（結果カードの上に表示）
+  if (node.message && node.result) {
+    const msgBubble = document.createElement('div');
+    msgBubble.className = 'bubble bot';
+    msgBubble.textContent = node.message;
+    wrap.appendChild(msgBubble);
+  }
 
   if (node.result && node.subsidies) {
     node.subsidies.forEach(sid => {
@@ -241,60 +271,79 @@ function addResultCard(node) {
     wrap.appendChild(card);
   }
 
-  // メッセージ（結果カードの上に表示）
-  if (node.message && node.result) {
-    const msgBubble = document.createElement('div');
-    msgBubble.className = 'bubble bot';
-    msgBubble.textContent = node.message;
-    wrap.insertBefore(msgBubble, wrap.firstChild);
-  }
-
-  // リセットボタン
-  const resetBtn = document.createElement('button');
-  resetBtn.className = 'reset-btn';
-  resetBtn.textContent = '🔄 最初からやり直す';
-  resetBtn.addEventListener('click', () => {
-    chat.innerHTML = '';
-    startFlow();
-  });
-  wrap.appendChild(resetBtn);
-
   chat.appendChild(wrap);
   scrollBottom();
 }
 
-// ── フロー制御 ────────────────────────────────────────────
-function goToNode(nodeId) {
-  const node = FLOW[nodeId];
-  if (!node) {
-    addBubble('エラー：ノードが見つかりません。', 'bot');
-    return;
-  }
+// ── フロー制御（履歴管理） ─────────────────────────────────
+// path: たどってきたステップの配列。各要素 { nodeId, choice }
+//   choice は選択済みなら {label, next}、現在の質問なら null
+let path = [];
 
-  // 結果ノード
-  if ('result' in node) {
-    addResultCard(node);
-    return;
-  }
+const INTRO = 'こんにちは！下関市の補助金・給付金をご案内します。\nいくつかの質問に答えていただくだけで、ご利用いただける可能性のある補助金をお調べします。';
 
-  // 質問ノード
-  setTimeout(() => {
-    addBubble(node.message, 'bot');
-    addChoices(node.choices, (choice) => {
-      addBubble(choice.label, 'user');
-      setTimeout(() => goToNode(choice.next), 400);
-    });
-  }, 300);
+// 選択肢を選んだとき：現在ステップに選択を記録し、次のノードへ進む
+function selectChoice(choice) {
+  path[path.length - 1].choice = choice;
+  path.push({ nodeId: choice.next, choice: null });
+  render();
 }
 
-function startFlow() {
-  goToNode('start');
+// 前の質問に戻る
+function goBack() {
+  if (path.length <= 1) return;
+  path.pop();
+  path[path.length - 1].choice = null; // 直前の選択を未選択に戻す
+  render();
+}
+
+// 最初に戻る
+function restart() {
+  path = [{ nodeId: 'start', choice: null }];
+  render();
+}
+
+// 会話全体を再描画
+function render() {
+  chat.innerHTML = '';
+  addBubble(INTRO, 'bot');
+
+  for (const step of path) {
+    const node = FLOW[step.nodeId];
+    if (!node) { addBubble('エラー：ノードが見つかりません。', 'bot'); break; }
+
+    // 結果ノード（終端）
+    if ('result' in node) {
+      addResultCard(node);
+      break;
+    }
+
+    // 質問ノード
+    addBubble(node.message, 'bot');
+    if (step.choice) {
+      // すでに回答済み → ユーザーの回答を表示
+      addBubble(step.choice.label, 'user');
+    } else {
+      // 現在の質問 → 選択肢を表示
+      addChoices(node.choices, selectChoice);
+    }
+  }
+
+  updateToolbar();
+  scrollBottom();
+}
+
+function updateToolbar() {
+  // 「前の質問に戻る」は最初の質問では無効化
+  document.getElementById('backBtn').disabled = (path.length <= 1);
 }
 
 // ── 初期化 ────────────────────────────────────────────────
+document.getElementById('backBtn').addEventListener('click', goBack);
+document.getElementById('restartBtn').addEventListener('click', restart);
+
 loadData().then(() => {
-  addBubble('こんにちは！下関市の補助金・給付金をご案内します。\nいくつかの質問に答えていただくだけで、ご利用いただける可能性のある補助金をお調べします。', 'bot');
-  setTimeout(startFlow, 600);
+  restart();
 }).catch(err => {
   console.error(err);
   addBubble('データの読み込みに失敗しました。ページを再読み込みしてください。', 'bot');
