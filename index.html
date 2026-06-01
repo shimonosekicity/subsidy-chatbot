@@ -230,7 +230,7 @@ function addResultCard(node) {
           <dt>申請期限</dt><dd>${s.deadline}</dd>
           <dt>問い合わせ</dt><dd>${s.contact}</dd>
         </dl>
-        <a class="url-link" href="${s.url}" target="_blank" rel="noopener">▶ 下関市公式サイトで詳細を確認</a>
+        <a class="url-link" href="${s.url}" target="_blank" rel="noopener">▶ ${s.urlLabel || '下関市公式サイト'}で詳細を確認</a>
       `;
       wrap.appendChild(card);
     });

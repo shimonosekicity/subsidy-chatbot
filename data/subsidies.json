@@ -43,7 +43,8 @@
       "conditions": "申請者または配偶者等が居住開始時点で29歳以下、市内に住宅を取得しローン返済中",
       "deadline": "居住開始後6ヶ月以内に初年度申請",
       "contact": "居住する市町の担当窓口（電子申請可）",
-      "url": "https://www.pref.yamaguchi.lg.jp/soshiki/30/294409.html"
+      "url": "https://www.pref.yamaguchi.lg.jp/soshiki/30/294409.html",
+      "urlLabel": "山口県公式サイト"
     },
     "s006": {
       "name": "空き家バンク活用促進改修補助金",
