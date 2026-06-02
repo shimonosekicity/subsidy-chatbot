@@ -30,24 +30,45 @@
   "migration_tokyo": {
     "message": "就業先はありますか？",
     "choices": [
-      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "result_s001" },
+      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "migration_tokyo_area" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s001_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
+    ]
+  },
+  "migration_tokyo_area": {
+    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "choices": [
+      { "label": "はい、過疎地域に定住する予定", "next": "result_s001_s003" },
+      { "label": "いいえ、その他の地域", "next": "result_s001" }
     ]
   },
   "migration_metro": {
     "message": "就業先はありますか？",
     "choices": [
-      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "result_s002" },
+      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "migration_metro_area" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
+    ]
+  },
+  "migration_metro_area": {
+    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "choices": [
+      { "label": "はい、過疎地域に定住する予定", "next": "result_s002_s003" },
+      { "label": "いいえ、その他の地域", "next": "result_s002" }
     ]
   },
   "migration_rural": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
-      { "label": "下関市外から転入する（Uターン含む）", "next": "result_s003" },
+      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_rural_birth" },
       { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
+    ]
+  },
+  "migration_rural_birth": {
+    "message": "過疎地域で第3子以降のお子さまを出産予定（または現在養育中）ですか？",
+    "choices": [
+      { "label": "はい", "next": "result_s003_s004" },
+      { "label": "いいえ", "next": "result_s003" }
     ]
   },
 
@@ -73,10 +94,17 @@
   "family": {
     "message": "結婚・子育て・妊娠のどれに当てはまりますか？",
     "choices": [
-      { "label": "最近結婚した（新婚）", "next": "result_s010" },
+      { "label": "最近結婚した（新婚）", "next": "family_married_pregnant" },
       { "label": "妊娠中または出産を予定している", "next": "result_s011" },
       { "label": "子どもの医療費が心配", "next": "result_s012" },
       { "label": "過疎地域に住んでいて第3子以降を出産した", "next": "result_s004" }
+    ]
+  },
+  "family_married_pregnant": {
+    "message": "現在妊娠中、または出産を予定していますか？",
+    "choices": [
+      { "label": "はい", "next": "result_s010_s011" },
+      { "label": "いいえ", "next": "result_s010" }
     ]
   },
 
@@ -173,6 +201,27 @@
     "result": true,
     "subsidies": ["s015"],
     "message": "下関暮らしサポート補助金に該当する可能性があります。ただし<span style=\"color:#c00;font-weight:bold;\">【転入前に】</span>LiveHUBしものせき等の移住相談窓口へのご相談が必須条件です。まずはLiveHUBしものせき（0120-540-201）にお問い合わせください。"
+  },
+
+  "result_s001_s003": {
+    "result": true,
+    "subsidies": ["s001", "s003"],
+    "message": "移住支援金（東京23区）と定住奨励金の両方に該当する可能性があります。それぞれ条件・申請窓口が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
+  },
+  "result_s002_s003": {
+    "result": true,
+    "subsidies": ["s002", "s003"],
+    "message": "移住支援金（大都市圏）と定住奨励金の両方に該当する可能性があります。それぞれ条件・申請窓口が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
+  },
+  "result_s003_s004": {
+    "result": true,
+    "subsidies": ["s003", "s004"],
+    "message": "定住奨励金と出産祝い金の両方に該当する可能性があります。それぞれ条件・申請期限が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
+  },
+  "result_s010_s011": {
+    "result": true,
+    "subsidies": ["s010", "s011"],
+    "message": "結婚新生活支援補助金と出産・子育て応援ギフトの両方に該当する可能性があります。担当窓口がそれぞれ異なりますので、詳細は各窓口にご確認ください。"
   },
 
   "no_match": {
