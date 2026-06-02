@@ -25,9 +25,9 @@
     align-items: center;
     gap: 8px;
     transition: background .15s, transform .15s;
+    user-select: none;
   }
   #subsidy-chat-btn:hover { background: #154480; transform: translateY(-2px); }
-  #subsidy-chat-btn .chat-icon { font-size: 1.2rem; }
 
   /* ── ポップアップ枠 ── */
   #subsidy-chat-popup {
@@ -37,8 +37,10 @@
     z-index: 9001;
     width: 400px;
     height: 600px;
-    max-width: calc(100vw - 32px);
-    max-height: calc(100vh - 100px);
+    min-width: 280px;
+    min-height: 360px;
+    max-width: calc(100vw - 16px);
+    max-height: calc(100vh - 16px);
     background: #fff;
     border-radius: 16px;
     box-shadow: 0 8px 40px rgba(0,0,0,.25);
@@ -48,51 +50,84 @@
   }
   #subsidy-chat-popup.open { display: flex; }
 
-  /* ── ポップアップ ヘッダー ── */
+  /* ── ヘッダー（ドラッグハンドル） ── */
   #subsidy-chat-popup-header {
     background: #1a56a0;
     color: #fff;
-    padding: 12px 16px;
+    padding: 10px 12px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     font-weight: bold;
     flex-shrink: 0;
+    cursor: grab;
+    user-select: none;
   }
-  #subsidy-chat-popup-header span { display: flex; align-items: center; gap: 8px; }
+  #subsidy-chat-popup-header:active { cursor: grabbing; }
+  #subsidy-chat-popup-header .header-title { display: flex; align-items: center; gap: 6px; }
 
-  #subsidy-chat-close {
-    background: none;
+  /* ── ヘッダーボタン群 ── */
+  .header-controls { display: flex; align-items: center; gap: 4px; }
+  .header-btn {
+    background: rgba(255,255,255,.2);
     border: none;
     color: #fff;
-    font-size: 1.4rem;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    font-size: 1rem;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background .15s;
     line-height: 1;
-    padding: 0 4px;
-    opacity: .85;
   }
-  #subsidy-chat-close:hover { opacity: 1; }
+  .header-btn:hover { background: rgba(255,255,255,.35); }
+  #subsidy-chat-close { font-size: 1.2rem; }
 
   /* ── iframe ── */
   #subsidy-chat-frame {
     flex: 1;
     border: none;
     width: 100%;
+    min-height: 0;
+  }
+
+  /* ── リサイズハンドル ── */
+  #subsidy-resize-handle {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    cursor: sw-resize;
+    opacity: .4;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    padding: 3px;
+    color: #555;
+    font-size: 14px;
   }
 </style>
 
 <!-- 起動ボタン -->
 <button id="subsidy-chat-btn" aria-label="補助金案内チャットを開く">
-  <span class="chat-icon">💬</span> 補助金・給付金を調べる
+  <span>💬</span> 補助金・給付金を調べる
 </button>
 
 <!-- ポップアップ -->
 <div id="subsidy-chat-popup" role="dialog" aria-label="補助金案内チャット">
   <div id="subsidy-chat-popup-header">
-    <span>💬 補助金・給付金 案内チャット</span>
-    <button id="subsidy-chat-close" aria-label="閉じる">×</button>
+    <span class="header-title">💬 補助金・給付金 案内チャット</span>
+    <div class="header-controls">
+      <button class="header-btn" id="subsidy-size-down" title="縮小" aria-label="縮小">－</button>
+      <button class="header-btn" id="subsidy-size-up"   title="拡大" aria-label="拡大">＋</button>
+      <button class="header-btn" id="subsidy-chat-close" title="閉じる" aria-label="閉じる">×</button>
+    </div>
   </div>
   <iframe
     id="subsidy-chat-frame"
@@ -100,25 +135,135 @@
     title="下関市補助金案内チャット"
     loading="lazy"
   ></iframe>
+  <div id="subsidy-resize-handle" title="ドラッグでサイズ変更">◤</div>
 </div>
 
 <script>
-  (function() {
-    var btn   = document.getElementById('subsidy-chat-btn');
-    var popup = document.getElementById('subsidy-chat-popup');
-    var close = document.getElementById('subsidy-chat-close');
+(function () {
+  var btn    = document.getElementById('subsidy-chat-btn');
+  var popup  = document.getElementById('subsidy-chat-popup');
+  var header = document.getElementById('subsidy-chat-popup-header');
+  var close  = document.getElementById('subsidy-chat-close');
+  var sizeUp = document.getElementById('subsidy-size-up');
+  var sizeDn = document.getElementById('subsidy-size-down');
+  var resizeHandle = document.getElementById('subsidy-resize-handle');
 
-    btn.addEventListener('click', function() {
-      popup.classList.toggle('open');
-    });
-    close.addEventListener('click', function() {
+  // ── 開閉 ──────────────────────────────────────────────────
+  btn.addEventListener('click', function () {
+    popup.classList.toggle('open');
+  });
+  close.addEventListener('click', function () {
+    popup.classList.remove('open');
+  });
+  document.addEventListener('click', function (e) {
+    if (!popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
       popup.classList.remove('open');
-    });
-    // ポップアップ外クリックで閉じる
-    document.addEventListener('click', function(e) {
-      if (!popup.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
-        popup.classList.remove('open');
-      }
-    });
-  })();
+    }
+  });
+
+  // ── 拡大・縮小ボタン ──────────────────────────────────────
+  var SIZES = [
+    { w: 300, h: 420 },
+    { w: 360, h: 520 },
+    { w: 400, h: 600 },  // デフォルト (index=2)
+    { w: 480, h: 700 },
+    { w: 560, h: 780 },
+  ];
+  var sizeIdx = 2;
+
+  function applySize(idx) {
+    sizeIdx = Math.max(0, Math.min(SIZES.length - 1, idx));
+    popup.style.width  = SIZES[sizeIdx].w + 'px';
+    popup.style.height = SIZES[sizeIdx].h + 'px';
+    sizeDn.disabled = sizeIdx === 0;
+    sizeUp.disabled = sizeIdx === SIZES.length - 1;
+  }
+
+  sizeUp.addEventListener('click', function (e) { e.stopPropagation(); applySize(sizeIdx + 1); });
+  sizeDn.addEventListener('click', function (e) { e.stopPropagation(); applySize(sizeIdx - 1); });
+
+  // ── ドラッグ移動（ヘッダーを掴んで移動） ─────────────────
+  var dragging = false;
+  var dragStartX, dragStartY, popupStartLeft, popupStartTop;
+
+  function getPopupRect() {
+    var r = popup.getBoundingClientRect();
+    return { left: r.left, top: r.top };
+  }
+
+  function startDrag(clientX, clientY) {
+    dragging = true;
+    dragStartX = clientX;
+    dragStartY = clientY;
+    var rect = getPopupRect();
+    popupStartLeft = rect.left;
+    popupStartTop  = rect.top;
+    // positionをfixedに固定（bottom/rightをleft/topに変換）
+    popup.style.left   = popupStartLeft + 'px';
+    popup.style.top    = popupStartTop  + 'px';
+    popup.style.right  = 'auto';
+    popup.style.bottom = 'auto';
+    popup.style.transition = 'none';
+  }
+
+  function moveDrag(clientX, clientY) {
+    if (!dragging) return;
+    var dx = clientX - dragStartX;
+    var dy = clientY - dragStartY;
+    var newLeft = popupStartLeft + dx;
+    var newTop  = popupStartTop  + dy;
+    // 画面外に出ないよう制限
+    newLeft = Math.max(0, Math.min(window.innerWidth  - popup.offsetWidth,  newLeft));
+    newTop  = Math.max(0, Math.min(window.innerHeight - popup.offsetHeight, newTop));
+    popup.style.left = newLeft + 'px';
+    popup.style.top  = newTop  + 'px';
+  }
+
+  function endDrag() { dragging = false; }
+
+  header.addEventListener('mousedown',  function (e) { if (e.button === 0) startDrag(e.clientX, e.clientY); });
+  document.addEventListener('mousemove', function (e) { moveDrag(e.clientX, e.clientY); });
+  document.addEventListener('mouseup',   endDrag);
+
+  // タッチ対応
+  header.addEventListener('touchstart', function (e) { var t = e.touches[0]; startDrag(t.clientX, t.clientY); }, { passive: true });
+  document.addEventListener('touchmove', function (e) { var t = e.touches[0]; moveDrag(t.clientX, t.clientY); }, { passive: true });
+  document.addEventListener('touchend',  endDrag);
+
+  // ── 左下ハンドルでリサイズ ────────────────────────────────
+  var resizing = false;
+  var resStartX, resStartY, resStartW, resStartH, resStartLeft;
+
+  resizeHandle.addEventListener('mousedown', function (e) {
+    e.stopPropagation();
+    resizing = true;
+    resStartX    = e.clientX;
+    resStartY    = e.clientY;
+    resStartW    = popup.offsetWidth;
+    resStartH    = popup.offsetHeight;
+    var rect     = popup.getBoundingClientRect();
+    resStartLeft = rect.left;
+    // left/topで管理
+    popup.style.left   = rect.left + 'px';
+    popup.style.top    = rect.top  + 'px';
+    popup.style.right  = 'auto';
+    popup.style.bottom = 'auto';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function (e) {
+    if (!resizing) return;
+    var dw = resStartX - e.clientX;  // 左方向に広がる
+    var dh = e.clientY - resStartY;  // 下方向に広がる
+    var newW = Math.max(280, resStartW + dw);
+    var newH = Math.max(360, resStartH + dh);
+    popup.style.width  = newW + 'px';
+    popup.style.height = newH + 'px';
+    // 左端を動かしてリサイズ
+    popup.style.left = (resStartLeft + resStartW - newW) + 'px';
+  });
+
+  document.addEventListener('mouseup', function () { resizing = false; });
+
+})();
 </script>
