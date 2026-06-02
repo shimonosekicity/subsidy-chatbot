@@ -329,7 +329,7 @@ function addResultCard(node) {
   if (node.message && node.result) {
     const msgBubble = document.createElement('div');
     msgBubble.className = 'bubble bot';
-    msgBubble.textContent = node.message;
+    msgBubble.innerHTML = node.message;
     wrap.appendChild(msgBubble);
   }
 
