@@ -154,6 +154,68 @@
     .nav-btn.restart:hover:not(:disabled) { background: #888; color: #fff; }
     .nav-btn:disabled { opacity: 0.35; cursor: default; }
 
+    /* ── 利用注意モーダル ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: rgba(0,0,0,.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-overlay.hidden { display: none; }
+
+    .modal-box {
+      background: #fff;
+      border-radius: 12px;
+      max-width: 480px;
+      width: 100%;
+      padding: 28px 24px 22px;
+      box-shadow: 0 8px 32px rgba(0,0,0,.25);
+    }
+    .modal-box h2 {
+      font-size: 1.05rem;
+      color: #1a56a0;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .modal-box ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .modal-box li {
+      display: flex;
+      gap: 10px;
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: #333;
+    }
+    .modal-box li .icon {
+      flex-shrink: 0;
+      font-size: 1.1rem;
+      margin-top: 1px;
+    }
+    .modal-agree-btn {
+      width: 100%;
+      background: #1a56a0;
+      color: #fff;
+      border: none;
+      border-radius: 24px;
+      padding: 13px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .modal-agree-btn:hover { background: #154480; }
+
     footer {
       text-align: center;
       font-size: 0.75rem;
@@ -171,6 +233,32 @@
   </svg>
   <h1>下関市<br>補助金・給付金 案内チャット</h1>
 </header>
+
+<!-- 利用注意モーダル -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <h2>⚠️ ご利用にあたっての注意事項</h2>
+    <ul>
+      <li>
+        <span class="icon">📋</span>
+        <span>このチャットの情報は<strong>参考情報</strong>です。補助金の受給を確約するものではありません。詳細・最終確認は必ず各担当窓口にお問い合わせください。</span>
+      </li>
+      <li>
+        <span class="icon">🔒</span>
+        <span>氏名・住所・口座番号などの<strong>個人情報は入力しないでください</strong>。このチャットは情報案内のみを目的としています。</span>
+      </li>
+      <li>
+        <span class="icon">📅</span>
+        <span>補助金には申請期限・予算上限があるため、<strong>条件を満たしていても対象外になる場合があります</strong>。最新情報は市の公式サイトでご確認ください。</span>
+      </li>
+      <li>
+        <span class="icon">🔗</span>
+        <span>リンク先の外部サイト（下関市公式サイト等）の内容・サービスについては、<strong>当チャットは責任を負いかねます</strong>。</span>
+      </li>
+    </ul>
+    <button class="modal-agree-btn" id="agreeBtn">上記に同意して利用を開始する</button>
+  </div>
+</div>
 
 <div id="chat"></div>
 
@@ -339,6 +427,11 @@ function updateToolbar() {
 }
 
 // ── 初期化 ────────────────────────────────────────────────
+// ── モーダル制御 ──────────────────────────────────────────
+document.getElementById('agreeBtn').addEventListener('click', () => {
+  document.getElementById('modalOverlay').classList.add('hidden');
+});
+
 document.getElementById('backBtn').addEventListener('click', goBack);
 document.getElementById('restartBtn').addEventListener('click', restart);
 
