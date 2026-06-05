@@ -52,8 +52,10 @@
     #lang-select option { color: #222; background: #fff; }
     /* Google翻訳バーを非表示 */
     #google_translate_element { display: none; }
-    .goog-te-banner-frame { display: none !important; }
-    body { top: 0 !important; }
+    .goog-te-banner-frame,
+    .goog-te-banner-frame.skiptranslate { display: none !important; }
+    body { top: 0 !important; position: relative !important; }
+    .skiptranslate > iframe { display: none !important; }
     #header-icon-btn {
       background: none;
       border: none;
@@ -293,6 +295,16 @@
     }, 'google_translate_element');
   }
 
+  // 翻訳バーを常に非表示にする
+  function hideBanner() {
+    var banner = document.querySelector('.goog-te-banner-frame');
+    if (banner) { banner.style.display = 'none'; }
+    document.body.style.top = '0';
+    document.body.style.position = '';
+  }
+  // 定期的に監視して非表示を維持
+  setInterval(hideBanner, 500);
+
   document.getElementById('lang-select').addEventListener('change', function () {
     var lang = this.value;
     var trySwitch = function (attempts) {
@@ -300,6 +312,7 @@
       if (combo) {
         combo.value = lang;
         combo.dispatchEvent(new Event('change'));
+        setTimeout(hideBanner, 800); // 翻訳後にバーを再度消す
       } else if (attempts > 0) {
         setTimeout(function () { trySwitch(attempts - 1); }, 300);
       }
