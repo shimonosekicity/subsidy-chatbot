@@ -27,6 +27,19 @@
     }
     header img { width: 36px; height: 36px; }
     header h1 { font-size: 1rem; line-height: 1.3; }
+    #header-icon-btn {
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      transition: opacity .15s, transform .15s;
+      flex-shrink: 0;
+    }
+    #header-icon-btn:hover { opacity: .75; transform: scale(1.08); }
+    #header-icon-btn title { display: none; }
 
     #chat {
       flex: 1;
@@ -227,10 +240,12 @@
 <body>
 
 <header>
-  <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-    <rect width="36" height="36" rx="8" fill="white" fill-opacity=".15"/>
-    <path d="M18 6C11.37 6 6 10.92 6 17c0 3.6 1.8 6.8 4.6 8.9L9 30l4.5-2.3c1.4.4 2.9.6 4.5.6 6.63 0 12-4.92 12-11S24.63 6 18 6Z" fill="white"/>
-  </svg>
+  <button id="header-icon-btn" title="最初に戻る" aria-label="最初に戻る">
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+      <rect width="36" height="36" rx="8" fill="white" fill-opacity=".15"/>
+      <path d="M18 6C11.37 6 6 10.92 6 17c0 3.6 1.8 6.8 4.6 8.9L9 30l4.5-2.3c1.4.4 2.9.6 4.5.6 6.63 0 12-4.92 12-11S24.63 6 18 6Z" fill="white"/>
+    </svg>
+  </button>
   <h1>下関市<br>補助金・給付金 案内チャット</h1>
 </header>
 
@@ -432,6 +447,7 @@ document.getElementById('agreeBtn').addEventListener('click', () => {
   document.getElementById('modalOverlay').classList.add('hidden');
 });
 
+document.getElementById('header-icon-btn').addEventListener('click', restart);
 document.getElementById('backBtn').addEventListener('click', goBack);
 document.getElementById('restartBtn').addEventListener('click', restart);
 
