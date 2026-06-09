@@ -282,7 +282,21 @@
       text-align: center;
       font-size: 0.75rem;
       color: #888;
-      padding: 10px;
+      padding: 10px 16px;
+    }
+
+    /* ── モバイル最適化 ── */
+    @media (max-width: 480px) {
+      header { padding: 8px 10px; gap: 6px; }
+      header h1 { font-size: 0.78rem; line-height: 1.4; }
+      #lang-select { font-size: 0.72rem; padding: 4px 6px; max-width: 72px; }
+      .bubble { max-width: 92%; }
+      .result-card { max-width: 100%; padding: 12px; }
+      .result-card dd { word-break: break-word; }
+      .result-card dl { gap: 4px 8px; }
+      footer { text-align: left; }
+      .nav-btn { font-size: 0.82rem; padding: 8px 14px; }
+      #chat { padding: 12px; }
     }
   </style>
 </head>
@@ -399,11 +413,11 @@
     <ul>
       <li>
         <span class="icon">📋</span>
-        <span>このチャットの情報は<strong>参考情報</strong>です。補助金の受給を確約するものではありません。詳細・最終確認は必ず各担当窓口にお問い合わせください。</span>
+        <span>このナビの情報は<strong>参考情報</strong>です。補助金の受給を確約するものではありません。詳細・最終確認は必ず各担当窓口にお問い合わせください。</span>
       </li>
       <li>
         <span class="icon">🔒</span>
-        <span>氏名・住所・口座番号などの<strong>個人情報は入力しないでください</strong>。このチャットは情報案内のみを目的としています。</span>
+        <span>氏名・住所・口座番号などの<strong>個人情報は入力しないでください</strong>。このナビは情報案内のみを目的としています。</span>
       </li>
       <li>
         <span class="icon">📅</span>
@@ -411,7 +425,7 @@
       </li>
       <li>
         <span class="icon">🔗</span>
-        <span>リンク先の外部サイト（下関市公式サイト等）の内容・サービスについては、<strong>当チャットは責任を負いかねます</strong>。</span>
+        <span>リンク先の外部サイト（下関市公式サイト等）の内容・サービスについては、<strong>当ナビは責任を負いかねます</strong>。</span>
       </li>
     </ul>
     <button class="modal-agree-btn" id="agreeBtn">上記に同意して利用を開始する</button>
