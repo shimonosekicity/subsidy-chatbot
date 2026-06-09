@@ -21,7 +21,7 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-      padding-bottom: 64px; /* 固定ツールバー分の余白 */
+      padding-bottom: 96px; /* 固定ツールバー分の余白 */
     }
 
     header {
@@ -170,13 +170,33 @@
       bottom: 0;
       z-index: 20;
       display: flex;
-      gap: 10px;
-      justify-content: center;
-      padding: 10px 12px;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 12px 8px;
       background: rgba(255,255,255,.97);
       border-top: 1px solid #d5dde6;
       box-shadow: 0 -2px 6px rgba(0,0,0,.06);
     }
+    .toolbar-nav {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    /* ── フィードバックリンク ── */
+    .feedback-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.78rem;
+      color: #666;
+      text-decoration: none;
+      border-bottom: 1px solid #bbb;
+      padding-bottom: 1px;
+      transition: color .15s, border-color .15s;
+    }
+    .feedback-link:hover { color: #1a56a0; border-color: #1a56a0; }
     .nav-btn {
       background: #fff;
       border: 2px solid #1a56a0;
@@ -403,8 +423,19 @@
 <footer>このチャットは下関市の補助金情報をご案内するものです。内容は参考情報であり、詳細は各担当窓口にお問い合わせください。</footer>
 
 <div class="toolbar">
-  <button id="backBtn" class="nav-btn" type="button">◀ 前の質問に戻る</button>
-  <button id="restartBtn" class="nav-btn restart" type="button">🔄 最初に戻る</button>
+  <div class="toolbar-nav">
+    <button id="backBtn" class="nav-btn" type="button">◀ 前の質問に戻る</button>
+    <button id="restartBtn" class="nav-btn restart" type="button">🔄 最初に戻る</button>
+  </div>
+  <!-- ▼ フィードバックURL：下の href を実際のフォームURLに変更してください ▼ -->
+  <a id="feedbackLink"
+     class="feedback-link"
+     href="https://forms.gle/XXXXXXXXXXXXXXXXX"
+     target="_blank"
+     rel="noopener">
+    📝 このチャットへのご意見・ご感想はこちら
+  </a>
+  <!-- ▲ フィードバックURL ここまで ▲ -->
 </div>
 
 <script>
@@ -573,6 +604,13 @@ document.getElementById('agreeBtn').addEventListener('click', () => {
 document.getElementById('header-icon-btn').addEventListener('click', restart);
 document.getElementById('backBtn').addEventListener('click', goBack);
 document.getElementById('restartBtn').addEventListener('click', restart);
+
+// フィードバッククリックをGA4で計測
+document.getElementById('feedbackLink').addEventListener('click', function () {
+  if (typeof gtag === 'function') {
+    gtag('event', 'feedback_click', { event_category: 'engagement', event_label: 'feedback_form' });
+  }
+});
 
 loadData().then(() => {
   restart();
