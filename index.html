@@ -662,6 +662,17 @@ loadData().then(() => {
   console.error(err);
   addBubble('データの読み込みに失敗しました。ページを再読み込みしてください。', 'bot');
 });
+
+// ── 5分滞在計測（GA4） ──────────────────────────────────────
+(function() {
+  var sent = false;
+  setTimeout(function() {
+    if (!sent && typeof gtag === 'function') {
+      sent = true;
+      gtag('event', 'stay_5mins');
+    }
+  }, 300000);
+})();
 </script>
 </body>
 </html>
