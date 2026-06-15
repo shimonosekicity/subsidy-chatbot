@@ -553,10 +553,20 @@ let path = [];
 
 const INTRO = 'こんにちは！下関市の補助金・給付金をご案内します。\nいくつかの質問に答えていただくだけで、ご利用いただける可能性のある補助金をお調べします。';
 
+// sessionStorageキー
+const SS_PATH  = 'subsidy_path';
+const SS_MODAL = 'subsidy_modal_agreed';
+
+// 進行状態をsessionStorageに保存（タブ内リロードで復元される）
+function savePath() {
+  try { sessionStorage.setItem(SS_PATH, JSON.stringify(path)); } catch(e) {}
+}
+
 // 選択肢を選んだとき：現在ステップに選択を記録し、次のノードへ進む
 function selectChoice(choice) {
   path[path.length - 1].choice = choice;
   path.push({ nodeId: choice.next, choice: null });
+  savePath();
   render();
 }
 
@@ -564,13 +574,15 @@ function selectChoice(choice) {
 function goBack() {
   if (path.length <= 1) return;
   path.pop();
-  path[path.length - 1].choice = null; // 直前の選択を未選択に戻す
+  path[path.length - 1].choice = null;
+  savePath();
   render();
 }
 
 // 最初に戻る
 function restart() {
   path = [{ nodeId: 'start', choice: null }];
+  savePath();
   render();
 }
 
@@ -611,8 +623,14 @@ function updateToolbar() {
 
 // ── 初期化 ────────────────────────────────────────────────
 // ── モーダル制御 ──────────────────────────────────────────
+// モーダル同意済みなら再読み込み時はスキップ
+if (sessionStorage.getItem(SS_MODAL) === '1') {
+  document.getElementById('modalOverlay').classList.add('hidden');
+}
+
 document.getElementById('agreeBtn').addEventListener('click', () => {
   document.getElementById('modalOverlay').classList.add('hidden');
+  sessionStorage.setItem(SS_MODAL, '1');
 });
 
 document.getElementById('header-icon-btn').addEventListener('click', restart);
@@ -627,6 +645,18 @@ document.getElementById('feedbackLink').addEventListener('click', function () {
 });
 
 loadData().then(() => {
+  const saved = sessionStorage.getItem(SS_PATH);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      // 保存されたノードIDがフローに存在するか確認してから復元
+      if (parsed.length > 0 && FLOW[parsed[0].nodeId]) {
+        path = parsed;
+        render();
+        return;
+      }
+    } catch(e) {}
+  }
   restart();
 }).catch(err => {
   console.error(err);
