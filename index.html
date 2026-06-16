@@ -459,8 +459,8 @@ let SUBSIDIES = null;
 
 async function loadData() {
   const [flowRes, subRes] = await Promise.all([
-    fetch('./data/flow.json'),
-    fetch('./data/subsidies.json')
+    fetch('./data/flow.json', { cache: 'no-cache' }),
+    fetch('./data/subsidies.json', { cache: 'no-cache' })
   ]);
   FLOW = await flowRes.json();
   const subData = await subRes.json();
