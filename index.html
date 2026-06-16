@@ -564,6 +564,13 @@ function savePath() {
 
 // 選択肢を選んだとき：現在ステップに選択を記録し、次のノードへ進む
 function selectChoice(choice) {
+  if (typeof gtag === 'function') {
+    gtag('event', 'choice_select', {
+      node_id: path[path.length - 1].nodeId,
+      choice_label: choice.label,
+      next_node: choice.next
+    });
+  }
   path[path.length - 1].choice = choice;
   path.push({ nodeId: choice.next, choice: null });
   savePath();
@@ -597,6 +604,13 @@ function render() {
 
     // 結果ノード（終端）
     if ('result' in node) {
+      if (typeof gtag === 'function') {
+        gtag('event', 'result_view', {
+          result_node: step.nodeId,
+          subsidy_ids: node.subsidies ? node.subsidies.join(',') : 'none',
+          result_type: node.result ? 'match' : 'no_match'
+        });
+      }
       addResultCard(node);
       break;
     }
