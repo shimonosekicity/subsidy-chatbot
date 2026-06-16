@@ -14,7 +14,7 @@
     "message": "移住・定住に関するご状況を教えてください。",
     "choices": [
       { "label": "まだ検討中で下関市を下見・体験したい", "next": "result_s017" },
-      { "label": "東京23区から移住予定", "next": "migration_tokyo" },
+      { "label": "東京23区に在住、または東京圏（埼玉・千葉・東京都・神奈川）から23区へ通勤していた", "next": "migration_tokyo" },
       { "label": "東京圏・大阪・名古屋・広島・福岡から移住予定", "next": "migration_metro" },
       { "label": "過疎地域（豊田・豊浦・豊北・蓋井島・六連島）に定住したい", "next": "migration_rural" },
       { "label": "UJIターンして民間賃貸住宅に住む予定", "next": "migration_kurashi" },
