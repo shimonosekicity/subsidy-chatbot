@@ -82,6 +82,16 @@
     ]
   },
   "migration_rural": {
+    "message": "どの地域への定住をお考えですか？",
+    "choices": [
+      { "label": "豊田地区", "next": "migration_rural_current" },
+      { "label": "豊浦地区", "next": "migration_rural_current" },
+      { "label": "豊北地区", "next": "migration_rural_current" },
+      { "label": "蓋井島", "next": "migration_rural_current" },
+      { "label": "六連島", "next": "migration_rural_current" }
+    ]
+  },
+  "migration_rural_current": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
       { "label": "下関市外から転入する（Uターン含む）", "next": "migration_rural_birth" },
