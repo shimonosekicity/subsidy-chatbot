@@ -20,8 +20,8 @@
   "migration_decided": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
-      { "label": "東京23区に在住、または東京圏（埼玉・千葉・東京都・神奈川）から23区へ通勤していた", "next": "migration_tokyo" },
-      { "label": "東京圏・大阪・名古屋・広島・福岡から移住予定", "next": "migration_metro" },
+      { "label": "東京23区に在住、または東京圏から23区へ通勤していた", "next": "migration_tokyo" },
+      { "label": "東京圏（23区通勤なし）・大阪・名古屋・広島・福岡から移住予定", "next": "migration_metro" },
       { "label": "過疎地域（豊田・豊浦・豊北・蓋井島・六連島）に定住したい", "next": "migration_rural" },
       { "label": "UJIターンして民間賃貸住宅に住む予定", "next": "migration_kurashi" },
       { "label": "その他の地域から移住予定", "next": "no_match" }
