@@ -13,6 +13,7 @@
   "migration": {
     "message": "移住・定住に関するご状況を教えてください。",
     "choices": [
+      { "label": "まだ検討中で下関市を下見・体験したい", "next": "result_s017" },
       { "label": "東京23区から移住予定", "next": "migration_tokyo" },
       { "label": "東京圏・大阪・名古屋・広島・福岡から移住予定", "next": "migration_metro" },
       { "label": "過疎地域（豊田・豊浦・豊北・蓋井島・六連島）に定住したい", "next": "migration_rural" },
@@ -125,6 +126,11 @@
     ]
   },
 
+  "result_s017": {
+    "result": true,
+    "subsidies": ["s017"],
+    "message": "山口県YY!ターン支援交通費補助金に該当する可能性があります。下見・体験・就職面接など移住活動で山口県（下関市）を訪れる際の交通費（5千円〜3万円）を補助します。移住活動完了後30日以内に申請が必要です。"
+  },
   "result_s001": {
     "result": true,
     "subsidies": ["s001"],
