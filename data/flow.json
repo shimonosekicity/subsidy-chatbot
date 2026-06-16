@@ -31,11 +31,18 @@
   "migration_tokyo": {
     "message": "移住後の就業・働き方について教えてください。",
     "choices": [
-      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "migration_tokyo_area" },
-      { "label": "テレワークで現職を継続予定", "next": "migration_tokyo_area" },
-      { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_tokyo_area" },
+      { "label": "就職先は決まっています", "next": "migration_tokyo_employment" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s001_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
+    ]
+  },
+  "migration_tokyo_employment": {
+    "message": "どのような形での就職ですか？",
+    "choices": [
+      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_tokyo_area" },
+      { "label": "テレワークで現職を継続予定", "next": "migration_tokyo_area" },
+      { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_tokyo_area" },
+      { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
     ]
   },
   "migration_tokyo_area": {
@@ -48,10 +55,17 @@
   "migration_metro": {
     "message": "移住後の就業・働き方について教えてください。",
     "choices": [
-      { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "migration_metro_area" },
-      { "label": "テレワークで現職を継続予定", "next": "migration_metro_area" },
+      { "label": "就職先は決まっています", "next": "migration_metro_employment" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
+    ]
+  },
+  "migration_metro_employment": {
+    "message": "どのような形での就職ですか？",
+    "choices": [
+      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_metro_area" },
+      { "label": "テレワークで現職を継続予定", "next": "migration_metro_area" },
+      { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
     ]
   },
   "migration_metro_area": {
@@ -255,9 +269,13 @@
     "result": false,
     "message": "ご状況に合う補助金が見つかりませんでした。詳しくはLiveHUBしものせきにお問い合わせください。\nLiveHUBしものせき TEL: 0120-540-201"
   },
+  "no_match_employment": {
+    "result": false,
+    "message": "移住支援金の就業要件は①やまぐちジョブナビ掲載求人への就業、②テレワークによる現職継続、③やまぐち専門人材マッチング事業の利用、④やまぐち創業補助金を受けての創業、のいずれかが必要です。就職先が決まっている場合でも要件を満たさない場合は対象外となります。詳しくはLiveHUBしものせきにご相談ください。\nLiveHUBしものせき TEL: 0120-540-201"
+  },
   "no_match_migration": {
     "result": false,
-    "message": "移住支援金は「やまぐちジョブナビ」掲載の求人への就業または創業補助金を受けた創業が条件です。まずはやまぐちジョブナビをご確認ください。\n問い合わせ：LiveHUBしものせき TEL: 0120-540-201"
+    "message": "移住支援金は就業先がやまぐちジョブナビ掲載の求人、テレワーク継続、専門人材マッチング、または創業補助金を受けた創業であることが条件です。まずはLiveHUBしものせきにご相談ください。\n問い合わせ：LiveHUBしものせき TEL: 0120-540-201"
   },
   "no_match_rural": {
     "result": false,
