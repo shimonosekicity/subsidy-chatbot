@@ -46,9 +46,10 @@
     ]
   },
   "migration_metro": {
-    "message": "就業先はありますか？",
+    "message": "移住後の就業・働き方について教えてください。",
     "choices": [
       { "label": "「やまぐちジョブナビ」掲載の求人に就業予定", "next": "migration_metro_area" },
+      { "label": "テレワークで現職を継続予定", "next": "migration_metro_area" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
     ]
