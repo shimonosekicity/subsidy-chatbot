@@ -22,7 +22,7 @@
   "migration_other_stage": {
     "message": "移住の状況を教えてください。",
     "choices": [
-      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "migration_preview" },
       { "label": "移住することが決まっている", "next": "migration_other" }
     ]
   },
@@ -98,15 +98,23 @@
   "migration_tokyo_stage": {
     "message": "移住の状況を教えてください。",
     "choices": [
-      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "migration_preview" },
       { "label": "移住することが決まっている", "next": "migration_tokyo" }
     ]
   },
   "migration_metro_stage": {
     "message": "移住の状況を教えてください。",
     "choices": [
-      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "migration_preview" },
       { "label": "移住することが決まっている", "next": "migration_metro" }
+    ]
+  },
+
+  "migration_preview": {
+    "message": "下見・体験の方法を選択してください。",
+    "choices": [
+      { "label": "YY!ターン支援（交通費補助）を利用したい", "next": "result_s017" },
+      { "label": "お試し暮らし（無料宿泊プログラム）を利用したい", "next": "result_otameshi" }
     ]
   },
 
@@ -221,6 +229,12 @@
     "subsidies": ["s017"],
     "message": "山口県YY!ターン支援交通費補助金に該当する可能性があります。下見・体験・就職面接など移住活動で山口県（下関市）を訪れる際の交通費（5千円〜3万円）を補助します。<span style=\"color:#c00;font-weight:bold;\">【注意】事前のご予約・ご相談なしでの訪問は、補助対象外となる場合がございます。必ず事前にLiveHUBしものせき等へご相談・ご予約のうえご訪問ください。</span>移住活動完了後30日以内に申請が必要です。移住が決まった際は、移住支援金など他の補助金も対象になる場合がありますので、改めてこのナビをご利用ください。"
   },
+  "result_otameshi": {
+    "result": true,
+    "subsidies": [],
+    "message": "下関市の「お試し暮らし」プログラムをご利用いただけます。<br><br><strong>【概要】</strong><br>移住を検討中の方が、実際の生活を体験できる無料宿泊プログラムです。<br><br><strong>【対象】</strong><br>下関市外在住で移住を検討中の方（1〜5名）。利用者の中に1人でも40歳未満の方がいることが条件です。<br><br><strong>【期間・費用】</strong><br>2泊3日〜4泊5日。宿泊料は無料（交通費・食費等は自己負担）。<br><br><strong>【施設】</strong><br>・まちなか暮らし：BRIDGE（下関駅徒歩3分）<br>・いなか暮らし：農業公園みのりの丘（豊田町）またはペンシオーネ島戸（豊北町・角島近く）<br><br><strong>【注意】</strong><br>LiveHUBしものせきでの移住相談および体験プログラムへの参加が利用の必須条件です。<br><br>お申し込み・詳細はLiveHUBしものせきへ。<br>TEL: 0120-540-201（火〜土曜 10時〜17時）<br><br>移住が決まった際は、移住支援金など他の補助金も対象になる場合がありますので、改めてこのナビをご利用ください。"
+  },
+
   "result_s001": {
     "result": true,
     "subsidies": ["s001"],
