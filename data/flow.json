@@ -11,43 +11,98 @@
   },
 
   "migration": {
-    "message": "移住についてのご状況を教えてください。",
-    "choices": [
-      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
-      { "label": "移住することが決まっている", "next": "migration_decided" }
-    ]
-  },
-  "migration_decided": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
-      { "label": "東京23区に在住、または東京圏から23区へ通勤していた", "next": "migration_tokyo" },
-      { "label": "東京圏（23区通勤なし）・大阪・名古屋・広島・福岡から移住予定", "next": "migration_metro" },
-      { "label": "過疎地域（豊田・豊浦・豊北・蓋井島・六連島）に定住したい", "next": "migration_rural" },
-      { "label": "UJIターンして民間賃貸住宅に住む予定", "next": "migration_kurashi" },
-      { "label": "その他の地域から移住予定", "next": "no_match" }
+      { "label": "東京23区在住、または東京圏から23区へ通勤していた", "next": "migration_tokyo_stage" },
+      { "label": "東京圏（23区通勤なし）・近畿圏・中京圏・広島県・福岡県", "next": "migration_metro_stage" },
+      { "label": "上記以外の地域から移住予定", "next": "migration_other_stage" }
     ]
   },
-  "migration_kurashi": {
-    "message": "以下の条件を確認してください。",
+
+  "migration_other_stage": {
+    "message": "移住の状況を教えてください。",
     "choices": [
-      { "label": "世帯主が39歳以下、または中学生以下の子どもがいる世帯", "next": "result_s015" },
-      { "label": "どちらにも当てはまらない", "next": "no_match" }
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "移住することが決まっている", "next": "migration_other" }
     ]
   },
+
+  "migration_other": {
+    "message": "移住の形態を教えてください。",
+    "choices": [
+      { "label": "住宅を購入・建築して移住する予定", "next": "migration_other_purchase" },
+      { "label": "民間賃貸住宅に住む予定（UJIターン）", "next": "migration_other_rental" },
+      { "label": "その他・わからない", "next": "no_match" }
+    ]
+  },
+
+  "migration_other_purchase": {
+    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "choices": [
+      { "label": "はい、過疎地域に定住する予定", "next": "migration_purchase_rural_current" },
+      { "label": "いいえ、その他の地域", "next": "housing_acquisition" }
+    ]
+  },
+  "migration_purchase_rural_current": {
+    "message": "現在のお住まいを教えてください。",
+    "choices": [
+      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_purchase_rural_birth" },
+      { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
+    ]
+  },
+  "migration_purchase_rural_birth": {
+    "message": "過疎地域で第3子以降のお子さまを出産予定（または現在養育中）ですか？",
+    "choices": [
+      { "label": "はい", "next": "result_s003_s004_s016" },
+      { "label": "いいえ", "next": "result_s003_s016" }
+    ]
+  },
+
+  "migration_other_rental": {
+    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "choices": [
+      { "label": "はい、過疎地域に定住する予定", "next": "migration_rental_rural_current" },
+      { "label": "いいえ、その他の地域", "next": "migration_kurashi" }
+    ]
+  },
+  "migration_rental_rural_current": {
+    "message": "現在のお住まいを教えてください。",
+    "choices": [
+      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_rental_age" },
+      { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
+    ]
+  },
+  "migration_rental_age": {
+    "message": "以下の条件に当てはまりますか？",
+    "choices": [
+      { "label": "世帯主が39歳以下、または中学生以下の子どもがいる世帯", "next": "result_s003_s015" },
+      { "label": "どちらにも当てはまらない", "next": "result_s003" }
+    ]
+  },
+
+  "migration_tokyo_stage": {
+    "message": "移住の状況を教えてください。",
+    "choices": [
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "移住することが決まっている", "next": "migration_tokyo" }
+    ]
+  },
+  "migration_metro_stage": {
+    "message": "移住の状況を教えてください。",
+    "choices": [
+      { "label": "まずは下関市を下見・体験したい（移住検討中）", "next": "result_s017" },
+      { "label": "移住することが決まっている", "next": "migration_metro" }
+    ]
+  },
+
   "migration_tokyo": {
-    "message": "移住後の就業・働き方について教えてください。",
-    "choices": [
-      { "label": "就職先は決まっています", "next": "migration_tokyo_employment" },
-      { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s001_sogyou" },
-      { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
-    ]
-  },
-  "migration_tokyo_employment": {
-    "message": "どのような形での就職ですか？",
+    "message": "移住後の働き方を教えてください。",
     "choices": [
       { "label": "テレワークで現職を継続予定", "next": "migration_tokyo_area" },
       { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_tokyo_area" },
       { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_tokyo_area" },
+      { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s001_sogyou" },
+      { "label": "就業先はまだ決まっていない", "next": "no_match_migration" },
       { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
     ]
   },
@@ -58,20 +113,15 @@
       { "label": "いいえ、その他の地域", "next": "result_s001" }
     ]
   },
+
   "migration_metro": {
-    "message": "移住後の就業・働き方について教えてください。",
-    "choices": [
-      { "label": "就職先は決まっています", "next": "migration_metro_employment" },
-      { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
-      { "label": "就業先はまだ決まっていない", "next": "no_match_migration" }
-    ]
-  },
-  "migration_metro_employment": {
-    "message": "どのような形での就職ですか？",
+    "message": "移住後の働き方を教えてください。",
     "choices": [
       { "label": "テレワークで現職を継続予定", "next": "migration_metro_area" },
       { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_metro_area" },
       { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_metro_area" },
+      { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
+      { "label": "就業先はまだ決まっていない", "next": "no_match_migration" },
       { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
     ]
   },
@@ -82,28 +132,12 @@
       { "label": "いいえ、その他の地域", "next": "result_s002" }
     ]
   },
-  "migration_rural": {
-    "message": "どの地域への定住をお考えですか？",
+
+  "migration_kurashi": {
+    "message": "以下の条件を確認してください。",
     "choices": [
-      { "label": "豊田地区", "next": "migration_rural_current" },
-      { "label": "豊浦地区", "next": "migration_rural_current" },
-      { "label": "豊北地区", "next": "migration_rural_current" },
-      { "label": "蓋井島", "next": "migration_rural_current" },
-      { "label": "六連島", "next": "migration_rural_current" }
-    ]
-  },
-  "migration_rural_current": {
-    "message": "現在のお住まいを教えてください。",
-    "choices": [
-      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_rural_birth" },
-      { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
-    ]
-  },
-  "migration_rural_birth": {
-    "message": "過疎地域で第3子以降のお子さまを出産予定（または現在養育中）ですか？",
-    "choices": [
-      { "label": "はい", "next": "result_s003_s004" },
-      { "label": "いいえ", "next": "result_s003" }
+      { "label": "世帯主が39歳以下、または中学生以下の子どもがいる世帯", "next": "result_s015" },
+      { "label": "どちらにも当てはまらない", "next": "no_match" }
     ]
   },
 
@@ -203,12 +237,12 @@
   "result_s016": {
     "result": true,
     "subsidies": ["s016"],
-    "message": "下関市住宅取得支援事業補助金に該当する可能性があります。【重要】契約前に交付申請が必要です。必ず住宅政策課（083-231-1941）にご相談のうえ、手続きを進めてください。"
+    "message": "下関市住宅取得支援事業補助金に該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】この補助金は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。"
   },
   "result_s005_s016": {
     "result": true,
     "subsidies": ["s005", "s016"],
-    "message": "やまぐち若者定住応援事業補助金と住宅取得支援事業補助金の両方に該当する可能性があります。【重要】住宅取得支援は契約前の申請が必須です。詳細は住宅政策課（083-231-1941）またはLiveHUBしものせき（0120-540-201）にご確認ください。"
+    "message": "やまぐち若者定住応援事業補助金と住宅取得支援事業補助金の両方に該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。詳細はLiveHUBしものせき（0120-540-201）にもご確認いただけます。"
   },
   "result_s006": {
     "result": true,
@@ -275,6 +309,21 @@
     "result": true,
     "subsidies": ["s003", "s004"],
     "message": "定住奨励金と出産祝い金の両方に該当する可能性があります。それぞれ条件・申請期限が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
+  },
+  "result_s003_s016": {
+    "result": true,
+    "subsidies": ["s003", "s016"],
+    "message": "定住奨励金（過疎地域）と住宅取得支援事業補助金の両方に該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。定住奨励金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s003_s004_s016": {
+    "result": true,
+    "subsidies": ["s003", "s004", "s016"],
+    "message": "定住奨励金（過疎地域）・出産祝い金（第3子以降）・住宅取得支援事業補助金の3つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。定住奨励金・出産祝い金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s003_s015": {
+    "result": true,
+    "subsidies": ["s003", "s015"],
+    "message": "定住奨励金（過疎地域）に該当する可能性があります。あわせて下関暮らしサポート補助金（家賃補助）も対象になり得ますが、<span style=\"color:#c00;font-weight:bold;\">【令和8年度の新規申請は受付終了】</span>しています。再開状況・申請方法はLiveHUBしものせき（0120-540-201）にご確認ください。"
   },
   "result_s010_s011": {
     "result": true,
