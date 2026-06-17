@@ -37,10 +37,14 @@
   },
 
   "migration_other_purchase": {
-    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "message": "定住先を教えてください。",
     "choices": [
-      { "label": "はい、過疎地域に定住する予定", "next": "migration_purchase_rural_current" },
-      { "label": "いいえ、その他の地域", "next": "housing_acquisition" }
+      { "label": "豊田地区", "next": "migration_purchase_rural_current" },
+      { "label": "豊浦地区", "next": "migration_purchase_rural_current" },
+      { "label": "豊北地区", "next": "migration_purchase_rural_current" },
+      { "label": "蓋井島", "next": "migration_purchase_rural_current" },
+      { "label": "六連島", "next": "migration_purchase_rural_current" },
+      { "label": "上記以外の地域", "next": "housing_acquisition" }
     ]
   },
   "migration_purchase_rural_current": {
@@ -59,10 +63,14 @@
   },
 
   "migration_other_rental": {
-    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "message": "定住先を教えてください。",
     "choices": [
-      { "label": "はい、過疎地域に定住する予定", "next": "migration_rental_rural_current" },
-      { "label": "いいえ、その他の地域", "next": "migration_kurashi" }
+      { "label": "豊田地区", "next": "migration_rental_rural_current" },
+      { "label": "豊浦地区", "next": "migration_rental_rural_current" },
+      { "label": "豊北地区", "next": "migration_rental_rural_current" },
+      { "label": "蓋井島", "next": "migration_rental_rural_current" },
+      { "label": "六連島", "next": "migration_rental_rural_current" },
+      { "label": "上記以外の地域", "next": "migration_kurashi" }
     ]
   },
   "migration_rental_rural_current": {
@@ -107,10 +115,14 @@
     ]
   },
   "migration_tokyo_area": {
-    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "message": "定住先を教えてください。",
     "choices": [
-      { "label": "はい、過疎地域に定住する予定", "next": "result_s001_s003" },
-      { "label": "いいえ、その他の地域", "next": "result_s001" }
+      { "label": "豊田地区", "next": "result_s001_s003" },
+      { "label": "豊浦地区", "next": "result_s001_s003" },
+      { "label": "豊北地区", "next": "result_s001_s003" },
+      { "label": "蓋井島", "next": "result_s001_s003" },
+      { "label": "六連島", "next": "result_s001_s003" },
+      { "label": "上記以外の地域", "next": "result_s001" }
     ]
   },
 
@@ -126,10 +138,14 @@
     ]
   },
   "migration_metro_area": {
-    "message": "定住先は過疎地域（豊田・豊浦・豊北・蓋井島・六連島）ですか？",
+    "message": "定住先を教えてください。",
     "choices": [
-      { "label": "はい、過疎地域に定住する予定", "next": "result_s002_s003" },
-      { "label": "いいえ、その他の地域", "next": "result_s002" }
+      { "label": "豊田地区", "next": "result_s002_s003" },
+      { "label": "豊浦地区", "next": "result_s002_s003" },
+      { "label": "豊北地区", "next": "result_s002_s003" },
+      { "label": "蓋井島", "next": "result_s002_s003" },
+      { "label": "六連島", "next": "result_s002_s003" },
+      { "label": "上記以外の地域", "next": "result_s002" }
     ]
   },
 
