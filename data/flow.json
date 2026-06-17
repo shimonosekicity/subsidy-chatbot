@@ -50,8 +50,15 @@
   "migration_purchase_rural_current": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
-      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_purchase_rural_birth" },
-      { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
+      { "label": "下関市外からの転入（Uターン・Iターン・Jターンすべて対象）", "next": "migration_purchase_rural_birth" },
+      { "label": "下関市内の他の地域から転居する", "next": "migration_purchase_rural_age" }
+    ]
+  },
+  "migration_purchase_rural_age": {
+    "message": "住宅取得時点で29歳以下で、住宅ローンを組む予定はありますか？",
+    "choices": [
+      { "label": "29歳以下で住宅ローンを組む予定", "next": "result_s005" },
+      { "label": "30歳以上、またはローンなし・現金購入", "next": "no_match_rural" }
     ]
   },
   "migration_purchase_rural_birth": {
@@ -76,7 +83,7 @@
   "migration_rental_rural_current": {
     "message": "現在のお住まいを教えてください。",
     "choices": [
-      { "label": "下関市外から転入する（Uターン含む）", "next": "migration_rental_age" },
+      { "label": "下関市外からの転入（Uターン・Iターン・Jターンすべて対象）", "next": "migration_rental_age" },
       { "label": "下関市内の他の地域から転居する", "next": "no_match_rural" }
     ]
   },
@@ -360,6 +367,6 @@
   },
   "no_match_rural": {
     "result": false,
-    "message": "定住奨励金は市外からの転入者（Uターン者含む）が対象です。市内転居の場合は対象外となります。\n詳しくはLiveHUBしものせき TEL: 0120-540-201 にお問い合わせください。"
+    "message": "定住奨励金は市外からの転入者（Uターン・Iターン・Jターン）が対象のため、市内転居の場合は対象外となります。詳しくはLiveHUBしものせきにご相談ください。\nTEL: 0120-540-201"
   }
 }
