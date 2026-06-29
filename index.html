@@ -557,6 +557,10 @@ const INTRO = 'こんにちは！下関市の補助金・給付金をご案内�
 const SS_PATH  = 'subsidy_path';
 const SS_MODAL = 'subsidy_modal_agreed';
 
+// ディープリンクで指定された開始ノード（?node= パラメータ）
+// FLOW読み込み後に有効なノードか確認するため、生の値を保持しておく
+const INITIAL_NODE_PARAM = new URLSearchParams(window.location.search).get('node') || 'start';
+
 // 進行状態をsessionStorageに保存（タブ内リロードで復元される）
 function savePath() {
   try { sessionStorage.setItem(SS_PATH, JSON.stringify(path)); } catch(e) {}
@@ -586,9 +590,10 @@ function goBack() {
   render();
 }
 
-// 最初に戻る
+// 最初に戻る（ディープリンクの場合はその開始ノードへ）
 function restart() {
-  path = [{ nodeId: 'start', choice: null }];
+  const startNode = (FLOW && FLOW[INITIAL_NODE_PARAM]) ? INITIAL_NODE_PARAM : 'start';
+  path = [{ nodeId: startNode, choice: null }];
   savePath();
   render();
 }
@@ -660,10 +665,8 @@ document.getElementById('feedbackLink').addEventListener('click', function () {
 
 loadData().then(() => {
   // URLパラメータ ?node= で指定されたノードから開始
-  const urlParams = new URLSearchParams(window.location.search);
-  const nodeParam = urlParams.get('node');
-  if (nodeParam && FLOW[nodeParam]) {
-    path = [{ nodeId: nodeParam, choice: null }];
+  if (INITIAL_NODE_PARAM !== 'start' && FLOW[INITIAL_NODE_PARAM]) {
+    path = [{ nodeId: INITIAL_NODE_PARAM, choice: null }];
     render();
     return;
   }
