@@ -659,6 +659,15 @@ document.getElementById('feedbackLink').addEventListener('click', function () {
 });
 
 loadData().then(() => {
+  // URLパラメータ ?node= で指定されたノードから開始
+  const urlParams = new URLSearchParams(window.location.search);
+  const nodeParam = urlParams.get('node');
+  if (nodeParam && FLOW[nodeParam]) {
+    path = [{ nodeId: nodeParam, choice: null }];
+    render();
+    return;
+  }
+
   const saved = sessionStorage.getItem(SS_PATH);
   if (saved) {
     try {
