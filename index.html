@@ -146,7 +146,11 @@
       line-height: 1.5;
       box-shadow: 0 2px 8px rgba(26,86,160,.25);
       font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
+    .choice-btn .choice-icon { font-size: 1.1rem; flex-shrink: 0; }
     .choice-btn:hover { background: #154480; transform: translateY(-1px); }
     .choice-btn:disabled { opacity: 0.45; cursor: default; transform: none; }
 
@@ -545,6 +549,32 @@ function addBubble(text, who) {
   return wrap;
 }
 
+const CHOICE_ICONS = [
+  { keywords: ['移住', '転入'],              icon: '🚢' },
+  { keywords: ['住宅', '取得', '改修'],      icon: '🏠' },
+  { keywords: ['空き家', '空き店舗'],        icon: '🏚️' },
+  { keywords: ['結婚', '子育て', '妊娠', '出産', '育児', '子ども'], icon: '👶' },
+  { keywords: ['就職', '就農', '起業'],      icon: '💼' },
+  { keywords: ['はい', 'ある', 'あり', '該当する', '対象'], icon: '✅' },
+  { keywords: ['いいえ', 'ない', 'なし', '該当しない', '対象外'], icon: '❌' },
+  { keywords: ['単身', '一人'],              icon: '🧑' },
+  { keywords: ['世帯', '家族'],              icon: '👨‍👩‍👧' },
+  { keywords: ['東京', '23区', '東京圏'],    icon: '🏙️' },
+  { keywords: ['子どもがいる', '子あり'],    icon: '👶' },
+  { keywords: ['リフォーム', '改修', '修繕'], icon: '🔨' },
+  { keywords: ['新築', '建築', '取得'],      icon: '🏗️' },
+  { keywords: ['農業', '農地', '農'],        icon: '🌾' },
+  { keywords: ['創業', '事業'],              icon: '🚀' },
+  { keywords: ['UIターン', 'Uターン', 'Iターン'], icon: '🔄' },
+];
+
+function getChoiceIcon(label) {
+  for (const { keywords, icon } of CHOICE_ICONS) {
+    if (keywords.some(k => label.includes(k))) return icon;
+  }
+  return '▶';
+}
+
 function addChoices(choices, onSelect) {
   const wrap = document.createElement('div');
   wrap.className = 'bubble-wrap bot';
@@ -553,7 +583,13 @@ function addChoices(choices, onSelect) {
   choices.forEach(c => {
     const btn = document.createElement('button');
     btn.className = 'choice-btn';
-    btn.textContent = c.label;
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'choice-icon';
+    iconSpan.textContent = getChoiceIcon(c.label);
+    const labelSpan = document.createElement('span');
+    labelSpan.textContent = c.label;
+    btn.appendChild(iconSpan);
+    btn.appendChild(labelSpan);
     btn.addEventListener('click', () => onSelect(c));
     div.appendChild(btn);
   });
