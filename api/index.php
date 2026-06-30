@@ -1,13 +1,13 @@
 <?php
 /**
- * 下関市 補助金ナビ API
+ * 下関市 補助金・給付金かんたんナビ
  *
  * エンドポイント一覧:
- *   GET /api/?endpoint=flow                    フロー全件取得
- *   GET /api/?endpoint=flow&node=start         特定ノード取得
- *   GET /api/?endpoint=subsidies               補助金全件取得
- *   GET /api/?endpoint=subsidies&id=s001       特定補助金取得
- *   GET /api/?endpoint=node&node=start         ノード＋補助金詳細を結合して返す
+ *   GET /?endpoint=flow                    フロー全件取得
+ *   GET /?endpoint=flow&node=start         特定ノード取得
+ *   GET /?endpoint=subsidies               補助金全件取得
+ *   GET /?endpoint=subsidies&id=s001       特定補助金取得
+ *   GET /?endpoint=node&node=start         ノード＋補助金詳細を結合して返す
  */
 
 // --- CORS ヘッダー（必要に応じて Origin を絞る） ---
@@ -120,14 +120,14 @@ switch ($endpoint) {
     case '':
     default:
         respond(200, [
-            'name'    => '下関市 補助金ナビ API',
+            'name'    => '下関市 補助金・給付金かんたんナビ',
             'version' => '1.0.0',
             'endpoints' => [
-                'GET /api/?endpoint=flow'                   => 'フロー全件取得',
-                'GET /api/?endpoint=flow&node={id}'         => '特定ノード取得',
-                'GET /api/?endpoint=subsidies'              => '補助金全件取得',
-                'GET /api/?endpoint=subsidies&id={id}'      => '特定補助金取得',
-                'GET /api/?endpoint=node&node={id}'         => 'ノード＋補助金詳細を結合して返す',
+                'GET /?endpoint=flow'                   => 'フロー全件取得',
+                'GET /?endpoint=flow&node={id}'         => '特定ノード取得',
+                'GET /?endpoint=subsidies'              => '補助金全件取得',
+                'GET /?endpoint=subsidies&id={id}'      => '特定補助金取得',
+                'GET /?endpoint=node&node={id}'         => 'ノード＋補助金詳細を結合して返す',
             ],
         ]);
 }
