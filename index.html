@@ -294,6 +294,33 @@
     }
     .modal-agree-btn:hover { background: #154480; }
 
+    /* ── 進捗バー ── */
+    .progress-wrap {
+      background: #fff;
+      padding: 8px 16px 10px;
+      border-bottom: 0.5px solid #c8d8ec;
+    }
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+    .progress-label { font-size: 0.72rem; color: #5a7a9a; }
+    .progress-step  { font-size: 0.72rem; color: #1a56a0; font-weight: bold; }
+    .progress-track {
+      height: 6px;
+      background: #d0e4f4;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: #1a56a0;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
     footer {
       text-align: center;
       font-size: 0.75rem;
@@ -454,6 +481,15 @@
     <path d="M0 16 Q150 0 300 16 Q450 32 600 16 Q750 0 900 16 Q1050 32 1200 16 L1200 0 L0 0 Z" fill="#1a56a0"/>
     <path d="M0 24 Q150 8 300 24 Q450 40 600 24 Q750 8 900 24 Q1050 40 1200 24 L1200 32 L0 32 Z" fill="#e8f4fb"/>
   </svg>
+</div>
+<div class="progress-wrap" id="progressWrap" style="display:none;">
+  <div class="progress-header">
+    <span class="progress-label">診断の進み具合</span>
+    <span class="progress-step" id="progressStep"></span>
+  </div>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
 </div>
 <div id="chat"></div>
 
@@ -655,12 +691,33 @@ function render() {
   }
 
   updateToolbar();
+  updateProgress();
   scrollBottom();
 }
 
 function updateToolbar() {
-  // 「前の質問に戻る」は最初の質問では無効化
   document.getElementById('backBtn').disabled = (path.length <= 1);
+}
+
+function updateProgress() {
+  const wrap = document.getElementById('progressWrap');
+  const fill = document.getElementById('progressFill');
+  const step = document.getElementById('progressStep');
+  const answered = path.length - 1;
+
+  if (answered <= 0) {
+    wrap.style.display = 'none';
+    return;
+  }
+
+  const MAX = 5;
+  const lastNode = FLOW[path[path.length - 1].nodeId];
+  const isResult = lastNode && 'result' in lastNode;
+  const pct = isResult ? 100 : Math.min(Math.round((answered / MAX) * 100), 95);
+
+  wrap.style.display = '';
+  fill.style.width = pct + '%';
+  step.textContent = isResult ? '診断完了！' : `${answered} / ${MAX} 問`;
 }
 
 // ── 初期化 ────────────────────────────────────────────────
