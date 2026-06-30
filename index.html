@@ -15,14 +15,6 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    @keyframes bob {
-      0%, 100% { transform: translateY(0); }
-      50%       { transform: translateY(-7px); }
-    }
-    @keyframes slidein {
-      0%   { transform: translateX(-24px); opacity: 0; }
-      100% { transform: translateX(0);     opacity: 1; }
-    }
 
     body {
       font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
@@ -101,21 +93,6 @@
       max-width: 680px;
       width: 100%;
       margin: 0 auto;
-    }
-
-    /* ── ボット行（アバター＋吹き出し） ── */
-    .bot-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-    }
-    .bot-avatar {
-      width: 48px;
-      height: 48px;
-      object-fit: contain;
-      flex-shrink: 0;
-      filter: drop-shadow(0 2px 4px rgba(26,86,160,.2));
-      animation: slidein 0.45s ease-out, bob 2.5s ease-in-out 0.45s infinite;
     }
 
     /* ── メッセージバブル ── */
@@ -522,17 +499,6 @@ function scrollBottom() {
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
-function makeBotRow() {
-  const row = document.createElement('div');
-  row.className = 'bot-row';
-  const avatar = document.createElement('img');
-  avatar.src = './images/mascot.png';
-  avatar.alt = 'マスコット';
-  avatar.className = 'bot-avatar';
-  row.appendChild(avatar);
-  return row;
-}
-
 function addBubble(text, who) {
   const wrap = document.createElement('div');
   wrap.className = `bubble-wrap ${who}`;
@@ -540,13 +506,7 @@ function addBubble(text, who) {
   b.className = `bubble ${who}`;
   b.textContent = text;
   wrap.appendChild(b);
-  if (who === 'bot') {
-    const row = makeBotRow();
-    row.appendChild(wrap);
-    chat.appendChild(row);
-  } else {
-    chat.appendChild(wrap);
-  }
+  chat.appendChild(wrap);
   scrollBottom();
   return wrap;
 }
@@ -607,9 +567,7 @@ function addResultCard(node) {
     wrap.appendChild(card);
   }
 
-  const row = makeBotRow();
-  row.appendChild(wrap);
-  chat.appendChild(row);
+  chat.appendChild(wrap);
   scrollBottom();
 }
 
