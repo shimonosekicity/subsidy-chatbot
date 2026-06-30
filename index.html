@@ -561,9 +561,7 @@ function addChoices(choices, onSelect) {
     div.appendChild(btn);
   });
   wrap.appendChild(div);
-  const row = makeBotRow();
-  row.appendChild(wrap);
-  chat.appendChild(row);
+  chat.appendChild(wrap);
   scrollBottom();
   return wrap;
 }
