@@ -114,6 +114,27 @@
     .bubble-wrap.bot { align-items: flex-start; }
     .bubble-wrap.user { align-items: flex-end; }
 
+    /* ── ボット行（アバター＋吹き出し横並び） ── */
+    .bot-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+    }
+    .bot-avatar {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      flex-shrink: 0;
+      filter: drop-shadow(0 1px 3px rgba(0,0,0,.15));
+    }
+    .bot-row .bubble-wrap {
+      flex: 1;
+      min-width: 0;
+    }
+    @media (max-width: 480px) {
+      .bot-avatar { width: 36px; height: 36px; }
+    }
+
     .bubble {
       max-width: 80%;
       padding: 10px 14px;
@@ -452,9 +473,6 @@
   </div>
 </div>
 
-<div class="mascot-wrap">
-  <img src="./images/mascot.png" alt="マスコットキャラクター">
-</div>
 <div id="chat"></div>
 
 <footer>このナビは下関市の補助金情報をご案内するものです。内容は参考情報であり、詳細は各担当窓口にお問い合わせください。</footer>
@@ -497,6 +515,17 @@ function scrollBottom() {
   window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 }
 
+function makeBotRow() {
+  const row = document.createElement('div');
+  row.className = 'bot-row';
+  const avatar = document.createElement('img');
+  avatar.src = './images/mascot.png';
+  avatar.alt = 'マスコット';
+  avatar.className = 'bot-avatar';
+  row.appendChild(avatar);
+  return row;
+}
+
 function addBubble(text, who) {
   const wrap = document.createElement('div');
   wrap.className = `bubble-wrap ${who}`;
@@ -504,7 +533,14 @@ function addBubble(text, who) {
   b.className = `bubble ${who}`;
   b.textContent = text;
   wrap.appendChild(b);
-  chat.appendChild(wrap);
+
+  if (who === 'bot') {
+    const row = makeBotRow();
+    row.appendChild(wrap);
+    chat.appendChild(row);
+  } else {
+    chat.appendChild(wrap);
+  }
   scrollBottom();
   return wrap;
 }
@@ -522,7 +558,9 @@ function addChoices(choices, onSelect) {
     div.appendChild(btn);
   });
   wrap.appendChild(div);
-  chat.appendChild(wrap);
+  const row = makeBotRow();
+  row.appendChild(wrap);
+  chat.appendChild(row);
   scrollBottom();
   return wrap;
 }
@@ -565,7 +603,9 @@ function addResultCard(node) {
     wrap.appendChild(card);
   }
 
-  chat.appendChild(wrap);
+  const row = makeBotRow();
+  row.appendChild(wrap);
+  chat.appendChild(row);
   scrollBottom();
 }
 
