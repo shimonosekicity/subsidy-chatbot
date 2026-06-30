@@ -550,26 +550,69 @@ function addBubble(text, who) {
 }
 
 const CHOICE_ICONS = [
-  { keywords: ['移住', '転入'],              icon: '🚢' },
-  { keywords: ['住宅', '取得', '改修'],      icon: '🏠' },
+  // カテゴリ（最初の画面）
+  { keywords: ['移住・転入'],                icon: '🚢' },
+  { keywords: ['住宅を取得', '住宅を購入', '住宅を建築'], icon: '🏠' },
   { keywords: ['空き家', '空き店舗'],        icon: '🏚️' },
-  { keywords: ['結婚', '子育て', '妊娠', '出産', '育児', '子ども'], icon: '👶' },
+  { keywords: ['結婚', '子育て', '妊娠'],    icon: '👶' },
   { keywords: ['就職', '就農', '起業'],      icon: '💼' },
-  { keywords: ['はい', 'ある', 'あり', '該当する', '対象'], icon: '✅' },
-  { keywords: ['いいえ', 'ない', 'なし', '該当しない', '対象外'], icon: '❌' },
-  { keywords: ['単身', '一人'],              icon: '🧑' },
-  { keywords: ['世帯', '家族'],              icon: '👨‍👩‍👧' },
-  { keywords: ['東京', '23区', '東京圏'],    icon: '🏙️' },
-  { keywords: ['子どもがいる', '子あり'],    icon: '👶' },
-  { keywords: ['リフォーム', '改修', '修繕'], icon: '🔨' },
-  { keywords: ['新築', '建築', '取得'],      icon: '🏗️' },
-  { keywords: ['農業', '農地', '農'],        icon: '🌾' },
-  { keywords: ['創業', '事業'],              icon: '🚀' },
-  { keywords: ['UIターン', 'Uターン', 'Iターン'], icon: '🔄' },
+  // 東京圏関連（先に厳密マッチ）
+  { keywords: ['東京23区在住', '23区へ通勤'], icon: '🏙️' },
+  { keywords: ['東京圏（23区通勤なし）'],    icon: '🗾' },
+  { keywords: ['上記以外の地域から移住'],    icon: '📍' },
+  // 移住状況
+  { keywords: ['下見・体験', '移住検討'],    icon: '🔍' },
+  { keywords: ['移住することが決まっている'], icon: '✈️' },
+  // 住宅・居住
+  { keywords: ['民間賃貸'],                  icon: '🏘️' },
+  { keywords: ['購入・建築', '建築して'],    icon: '🏗️' },
+  { keywords: ['改修したい'],                icon: '🔨' },
+  { keywords: ['取り壊し'],                  icon: '🏗️' },
+  { keywords: ['管理を業者'],                icon: '📋' },
+  // 転入・転居
+  { keywords: ['市外から転入'],              icon: '📦' },
+  { keywords: ['市内の他の地域'],            icon: '🔄' },
+  // 地区
+  { keywords: ['豊田地区'],                  icon: '🌿' },
+  { keywords: ['豊浦地区'],                  icon: '🌿' },
+  { keywords: ['豊北地区'],                  icon: '🌿' },
+  { keywords: ['蓋井島', '六連島'],          icon: '🏝️' },
+  // 年齢・世帯条件
+  { keywords: ['29歳以下'],                  icon: '🧑' },
+  { keywords: ['30歳以上', '現金購入'],      icon: '🧑' },
+  { keywords: ['世帯主が39歳', '中学生以下の子ども'], icon: '👨‍👩‍👧' },
+  // 就業関連
+  { keywords: ['テレワーク'],                icon: '💻' },
+  { keywords: ['専門人材マッチング'],        icon: '🤝' },
+  { keywords: ['ジョブナビ'],                icon: '📋' },
+  { keywords: ['創業補助金', '創業予定'],    icon: '🚀' },
+  { keywords: ['就業先はまだ'],              icon: '🤔' },
+  { keywords: ['奨学金'],                    icon: '🎓' },
+  { keywords: ['農業', '就農体験'],          icon: '🌾' },
+  { keywords: ['お店を開業', '店舗開業'],    icon: '🏪' },
+  // 結婚・子育て関連
+  { keywords: ['新婚', '最近結婚'],          icon: '💍' },
+  { keywords: ['妊娠中', '出産を予定'],      icon: '🤰' },
+  { keywords: ['子どもの医療費'],            icon: '🏥' },
+  { keywords: ['過疎地域', '第3子'],         icon: '👧' },
+  // 住所変更
+  { keywords: ['住所が変わります'],          icon: '📦' },
+  { keywords: ['住所は変わりません'],        icon: '🏠' },
+  // 支援制度
+  { keywords: ['YY!ターン', '交通費補助'],   icon: '🚌' },
+  { keywords: ['お試し暮らし'],              icon: '🏠' },
+  // はい/いいえ（短いラベルのみ）
+  { keywords: ['はい'],   icon: '✅', maxLen: 6 },
+  { keywords: ['いいえ'], icon: '❌', maxLen: 6 },
+  // その他・わからない
+  { keywords: ['わからない', 'その他'],      icon: '❓' },
+  { keywords: ['どちらにも当てはまらない', '上記以外'], icon: '➖' },
+  { keywords: ['まだ決まっていない'],        icon: '🤔' },
 ];
 
 function getChoiceIcon(label) {
-  for (const { keywords, icon } of CHOICE_ICONS) {
+  for (const { keywords, icon, maxLen } of CHOICE_ICONS) {
+    if (maxLen && label.length > maxLen) continue;
     if (keywords.some(k => label.includes(k))) return icon;
   }
   return '▶';
