@@ -716,11 +716,20 @@ function selectChoice(choice) {
   path[path.length - 1].choice = choice;
   path.push({ nodeId: choice.next, choice: null });
   savePath();
+  // ブラウザの履歴にも積む（戻るボタンで前の質問に戻れるように）
+  history.pushState({ subsidyStep: path.length }, '');
   render();
 }
 
-// 前の質問に戻る
+// 前の質問に戻る（ブラウザの戻るボタンと同じ挙動に統一）
+// history.back() を呼び、実際の巻き戻しは popstate ハンドラで行う
 function goBack() {
+  if (path.length <= 1) return;
+  history.back();
+}
+
+// path を1ステップ巻き戻す実処理（「前の質問に戻る」ボタン／ブラウザの戻るボタン共通）
+function stepBack() {
   if (path.length <= 1) return;
   path.pop();
   path[path.length - 1].choice = null;
@@ -728,11 +737,18 @@ function goBack() {
   render();
 }
 
+// ブラウザ／アプリ外の戻るボタンが押されたときは、
+// サイトを離れる代わりに「前の質問に戻る」を実行する
+window.addEventListener('popstate', () => {
+  stepBack();
+});
+
 // 最初に戻る（ディープリンクの場合はその開始ノードへ）
 function restart() {
   const startNode = (FLOW && FLOW[INITIAL_NODE_PARAM]) ? INITIAL_NODE_PARAM : 'start';
   path = [{ nodeId: startNode, choice: null }];
   savePath();
+  history.replaceState({ subsidyStep: 1 }, '');
   render();
 }
 
@@ -826,6 +842,7 @@ loadData().then(() => {
   // URLパラメータ ?node= で指定されたノードから開始
   if (INITIAL_NODE_PARAM !== 'start' && FLOW[INITIAL_NODE_PARAM]) {
     path = [{ nodeId: INITIAL_NODE_PARAM, choice: null }];
+    history.replaceState({ subsidyStep: path.length }, '');
     render();
     return;
   }
@@ -837,6 +854,7 @@ loadData().then(() => {
       // 保存されたノードIDがフローに存在するか確認してから復元
       if (parsed.length > 0 && FLOW[parsed[0].nodeId]) {
         path = parsed;
+        history.replaceState({ subsidyStep: path.length }, '');
         render();
         return;
       }
