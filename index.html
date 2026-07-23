@@ -645,6 +645,9 @@ function addChoices(choices, onSelect) {
 function addResultCard(node) {
   const wrap = document.createElement('div');
   wrap.className = 'bubble-wrap bot';
+  // 結果表示時はこのラッパーの先頭までスクロールする（下端まで飛ばさない）。
+  // 上に少し余白を残して、直前の回答も見えるようにする。
+  wrap.style.scrollMarginTop = '16px';
 
   // メッセージ（結果カードの上に表示）
   if (node.message && node.result) {
@@ -681,7 +684,7 @@ function addResultCard(node) {
   }
 
   chat.appendChild(wrap);
-  scrollBottom();
+  return wrap;
 }
 
 // ── フロー制御（履歴管理） ─────────────────────────────────
@@ -757,6 +760,9 @@ function render() {
   chat.innerHTML = '';
   addBubble(INTRO, 'bot');
 
+  // 結果（診断完了）が表示された場合、そのラッパーを保持しておく
+  let resultWrap = null;
+
   for (const step of path) {
     const node = FLOW[step.nodeId];
     if (!node) { addBubble('エラー：ノードが見つかりません。', 'bot'); break; }
@@ -770,7 +776,7 @@ function render() {
           result_type: node.result ? 'match' : 'no_match'
         });
       }
-      addResultCard(node);
+      resultWrap = addResultCard(node);
       break;
     }
 
@@ -787,7 +793,13 @@ function render() {
 
   updateToolbar();
   updateProgress();
-  scrollBottom();
+  // 診断完了時は結果の先頭までスクロール（一番下まで飛ばさない）。
+  // 質問中は従来どおり最下部（新しい質問）までスクロールする。
+  if (resultWrap) {
+    resultWrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  } else {
+    scrollBottom();
+  }
 }
 
 function updateToolbar() {
