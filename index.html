@@ -26,9 +26,11 @@
   --gutter:calc(var(--avatar) + var(--avatar-gap));
 }
 *{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-text-size-adjust:100%;}
+/* iframe埋め込み時、iOSでは100vhが実際の枠の高さと一致しないことがあるため、
+   高さは html からの % で受け渡す（枠の高さと必ず一致させる） */
+html{-webkit-text-size-adjust:100%;height:100%;}
 body{font-family:var(--font);color:var(--ink);background:var(--bg);
-  display:flex;flex-direction:column;min-height:100vh;padding-bottom:104px;
+  display:flex;flex-direction:column;min-height:100%;padding-bottom:104px;
   line-height:1.6;-webkit-font-smoothing:antialiased;}
 
 /* ── ヘッダー ── */
@@ -63,6 +65,8 @@ body{top:0 !important;position:relative !important;}
 
 /* ── チャット領域 ── */
 #chat{flex:1;padding:20px 16px;display:flex;flex-direction:column;gap:14px;max-width:700px;width:100%;margin:0 auto;}
+/* 新しい発言へスクロールするとき、下部の固定ツールバーに隠れないようにする */
+#chat>*{scroll-margin-bottom:112px;}
 
 /* ── バブル ── */
 .bubble-wrap{display:flex;flex-direction:column;gap:10px;}
@@ -353,9 +357,18 @@ const chat = document.getElementById('chat');
 // 結果表示のレンダリング中は、途中のバブル追加による最下部スクロールを抑止する。
 // （最後に結果の先頭へ一度だけスクロールするため）
 let suppressScrollBottom = false;
+// 新しい発言が画面の外にあるときだけ、その発言までスクロールする。
+// 常にページ最下部へ飛ばすと、iframe埋め込み時などに本文より下の余白まで
+// スクロールしてしまい、何も表示されていないように見えるため。
+const TOOLBAR_SPACE = 112; // 下部の固定ツールバー分の余白
 function scrollBottom() {
   if (suppressScrollBottom) return;
-  window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  const last = chat.lastElementChild;
+  if (!last) return;
+  const rect = last.getBoundingClientRect();
+  // すでに画面内に収まっているならスクロールしない
+  if (rect.bottom <= window.innerHeight - TOOLBAR_SPACE) return;
+  last.scrollIntoView({ behavior: 'smooth', block: 'end' });
 }
 
 // ボットのふきだしの左にマスコットのアイコンを添える
@@ -607,7 +620,9 @@ function render() {
   // 最後に結果の先頭へ一度だけスクロールする（一番下まで飛ばさない）。
   const lastNode = path.length ? FLOW[path[path.length - 1].nodeId] : null;
   const endsInResult = !!(lastNode && 'result' in lastNode);
-  suppressScrollBottom = endsInResult;
+  // まだ何も回答していない最初の表示では、一切スクロールせず先頭から見せる
+  const isInitial = path.length <= 1;
+  suppressScrollBottom = endsInResult || isInitial;
 
   addBubble(INTRO, 'bot');
 
@@ -651,7 +666,7 @@ function render() {
   suppressScrollBottom = false;
   if (resultWrap) {
     resultWrap.scrollIntoView({ behavior: 'auto', block: 'start' });
-  } else {
+  } else if (!isInitial) {
     scrollBottom();
   }
 }
