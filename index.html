@@ -154,6 +154,30 @@ body{top:0 !important;position:relative !important;}
 .result-card dd .ci2{display:block;padding-left:2.4em;text-indent:-1.15em;}
 .result-card dd .cs{padding-left:2.3em;text-indent:-1.15em;color:var(--ink-soft);font-size:.94em;}
 .result-card dd .nw{white-space:nowrap;}
+/* ── 手続きの流れ（番号付きステップ） ── */
+.result-card .steps{list-style:none;counter-reset:step;margin:2px 0 0;}
+.result-card .steps li{position:relative;counter-increment:step;padding:0 0 10px 26px;}
+.result-card .steps li:last-child{padding-bottom:0;}
+/* 番号の丸 */
+.result-card .steps li::before{
+  content:counter(step);position:absolute;left:0;top:1px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--navy);color:#fff;
+  font-size:.68rem;font-weight:700;line-height:18px;text-align:center;
+}
+/* ステップ同士をつなぐ縦線 */
+.result-card .steps li::after{
+  content:"";position:absolute;left:8.5px;top:21px;bottom:2px;
+  width:1px;background:var(--line-strong);
+}
+.result-card .steps li:last-child::after{display:none;}
+.result-card .steps .step-when{display:block;font-weight:700;color:var(--navy);font-size:.78rem;}
+.result-card .steps .step-what{display:block;}
+/* 順番を間違えると対象外になるステップ */
+.result-card .steps li.warn::before{background:var(--danger);}
+.result-card .steps li.warn .step-when{color:var(--danger);}
+.result-card .steps li.warn .step-what{color:var(--danger);font-weight:700;}
+
 .result-card .url-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#fff;background:var(--blue);padding:8px 14px;border-radius:99px;font-size:.83rem;font-weight:600;text-decoration:none;transition:background .16s,transform .1s;}
 .result-card .url-link:hover{background:var(--navy);transform:translateY(-1px);}
 .result-card .url-link:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
@@ -584,12 +608,22 @@ function addResultCard(node) {
       if (!s) return;
       const card = document.createElement('div');
       card.className = 'result-card';
+      // 手続きの流れ（steps が用意されている制度だけ表示する）
+      const stepsHtml = (s.steps && s.steps.length)
+        ? `<dt>手続きの流れ</dt><dd><ol class="steps">` + s.steps.map(st =>
+            `<li${st.warn ? ' class="warn"' : ''}>` +
+            `<span class="step-when">${st.when}</span>` +
+            `<span class="step-what">${st.what}</span></li>`
+          ).join('') + `</ol></dd>`
+        : '';
+
       card.innerHTML = `
         <h3>✅ ${s.name}</h3>
         <p>${s.summary}</p>
         <dl>
           <dt>補助額</dt><dd>${s.amount}</dd>
           <dt>主な条件</dt><dd>${s.conditions}</dd>
+          ${stepsHtml}
           <dt>申請期限</dt><dd>${s.deadline}</dd>
           <dt>問い合わせ</dt><dd>${s.contact}</dd>
         </dl>
