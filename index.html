@@ -28,10 +28,21 @@
 *{box-sizing:border-box;margin:0;padding:0;}
 /* iframe埋め込み時、iOSでは100vhが実際の枠の高さと一致しないことがあるため、
    高さは html からの % で受け渡す（枠の高さと必ず一致させる） */
-html{-webkit-text-size-adjust:100%;height:100%;}
-body{font-family:var(--font);color:var(--ink);background:var(--bg);
+/* 背景色は html 側に置く。body に背景があると、背面(z-index:-1)の波が隠れるため。 */
+html{-webkit-text-size-adjust:100%;height:100%;background:var(--bg);}
+body{font-family:var(--font);color:var(--ink);background:transparent;
   display:flex;flex-direction:column;min-height:100%;padding-bottom:104px;
   line-height:1.6;-webkit-font-smoothing:antialiased;}
+
+/* ── 背景の海（ウェーブアニメーション） ──
+   本文の背面(z-index:-1)に固定配置。3層をそれぞれ違う速さで流して奥行きを出す。
+   1周期ぶん(要素幅の50%)ずらすと継ぎ目なくループする。 */
+.sea{position:fixed;left:0;right:0;bottom:88px;height:160px;z-index:-1;pointer-events:none;overflow:hidden;}
+.sea-wave{position:absolute;left:0;bottom:0;width:200%;height:100%;display:block;}
+.sea-wave-1{fill:#d6e8f6;animation:seaDrift 28s linear infinite;}
+.sea-wave-2{fill:#c0dcef;height:80%;animation:seaDrift 19s linear infinite reverse;}
+.sea-wave-3{fill:#a8cfe8;height:58%;animation:seaDrift 13s linear infinite;}
+@keyframes seaDrift{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 
 /* ── ヘッダー ── */
 header{background:var(--navy);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:14px;position:relative;overflow:hidden;}
@@ -157,7 +168,8 @@ body{top:0 !important;position:relative !important;}
 .modal-agree-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
 
 /* ── フッター ── */
-footer{text-align:center;font-size:.75rem;color:var(--ink-soft);padding:14px 16px;line-height:1.6;}
+/* 背景の波と重なっても読めるよう、フッターの文字は少し濃くする（コントラスト比5.0:1） */
+footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-height:1.6;}
 
 /* ── モバイル ── */
 @media (max-width:480px){
@@ -165,6 +177,7 @@ footer{text-align:center;font-size:.75rem;color:var(--ink-soft);padding:14px 16p
   header{padding:11px 12px;gap:8px;}
   header h1{font-size:.9rem;}
   .header-mascot{width:38px;height:38px;}
+  .sea{bottom:92px;height:112px;}
   #lang-select{font-size:.72rem;padding:5px 8px;max-width:96px;}
   .bubble{max-width:92%;}
   .result-card{max-width:100%;padding:14px 15px;}
@@ -181,6 +194,13 @@ footer{text-align:center;font-size:.75rem;color:var(--ink-soft);padding:14px 16p
 </style>
 </head>
 <body>
+
+<!-- 背景の海（装飾） -->
+<div class="sea" aria-hidden="true">
+  <svg class="sea-wave sea-wave-1" viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,64 C120,96 240,96 360,64 C480,32 600,32 720,64 C840,96 960,96 1080,64 C1200,32 1320,32 1440,64 L1440,160 L0,160 Z"/></svg>
+  <svg class="sea-wave sea-wave-2" viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,64 C120,96 240,96 360,64 C480,32 600,32 720,64 C840,96 960,96 1080,64 C1200,32 1320,32 1440,64 L1440,160 L0,160 Z"/></svg>
+  <svg class="sea-wave sea-wave-3" viewBox="0 0 1440 160" preserveAspectRatio="none"><path d="M0,64 C120,96 240,96 360,64 C480,32 600,32 720,64 C840,96 960,96 1080,64 C1200,32 1320,32 1440,64 L1440,160 L0,160 Z"/></svg>
+</div>
 
 <header>
   <button id="header-icon-btn" title="最初に戻る" aria-label="最初に戻る">
