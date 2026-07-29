@@ -144,7 +144,14 @@ body{top:0 !important;position:relative !important;}
 .result-card p{color:var(--ink);}
 .result-card dl{display:grid;grid-template-columns:auto 1fr;gap:7px 14px;margin-top:12px;padding-top:12px;border-top:1px dashed var(--line-strong);}
 .result-card dt{font-weight:700;color:var(--navy);white-space:nowrap;font-size:.82rem;}
-.result-card dd{color:var(--ink);font-size:.86rem;}
+.result-card dd{color:var(--ink);font-size:.83rem;line-height:1.75;}
+/* 条件欄：見出し・項目・注記を行単位で組み、折り返しはぶら下げインデントにする */
+.result-card dd .ch,.result-card dd .ci,.result-card dd .cs{display:block;}
+.result-card dd .ch{font-weight:700;color:var(--navy);margin-top:7px;}
+.result-card dd .ch:first-child{margin-top:0;}
+.result-card dd .ci{padding-left:1.15em;text-indent:-1.15em;}
+.result-card dd .cs{padding-left:2.3em;text-indent:-1.15em;color:var(--ink-soft);font-size:.94em;}
+.result-card dd .nw{white-space:nowrap;}
 .result-card .url-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;color:#fff;background:var(--blue);padding:8px 14px;border-radius:99px;font-size:.83rem;font-weight:600;text-decoration:none;transition:background .16s,transform .1s;}
 .result-card .url-link:hover{background:var(--navy);transform:translateY(-1px);}
 .result-card .url-link:focus-visible{outline:2px solid var(--navy);outline-offset:2px;}
