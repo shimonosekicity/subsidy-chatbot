@@ -8,7 +8,15 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-YQE9DJMGSC');
+    // 他サイトへiframe埋め込みされると、ブラウザ（特にiOS Safari）が
+    // サードパーティCookieを保存できず、GA4は毎回別ユーザーとして数えてしまう。
+    // 親ページが ?cid= で自分のclient_idを渡してくれた場合は、それを使って
+    // 同一ユーザーとして計測する。
+    (function () {
+      var cid = null;
+      try { cid = new URLSearchParams(location.search).get('cid'); } catch (e) {}
+      gtag('config', 'G-YQE9DJMGSC', cid ? { client_id: cid } : {});
+    })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>下関市 補助金・給付金 かんたんナビ</title>
@@ -365,6 +373,36 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
 </div>
 
 <script>
+// ── 計測（GA4） ────────────────────────────────────────────
+// 埋め込み(iframe)かどうかを毎回のイベントに添えて、ポータル経由の利用を
+// 単体利用と区別できるようにする。あわせて親ページにも同じ内容を通知し、
+// 親側（ファーストパーティ）で正確なユーザー数を計測できるようにする。
+const IS_EMBEDDED = (function () {
+  try { return window.self !== window.top; } catch (e) { return true; }
+})();
+const EMBED_ORIGIN = (function () {
+  try { return document.referrer ? new URL(document.referrer).origin : ''; } catch (e) { return ''; }
+})();
+
+function track(name, params) {
+  const data = Object.assign({
+    embedded: IS_EMBEDDED ? 'yes' : 'no',
+    embed_host: EMBED_ORIGIN ? EMBED_ORIGIN.replace(/^https?:\/\//, '') : '(none)'
+  }, params || {});
+
+  if (typeof gtag === 'function') gtag('event', name, data);
+
+  // 親ページへ通知（受け取り側が無ければ何も起きない）
+  if (IS_EMBEDDED && EMBED_ORIGIN) {
+    try {
+      window.parent.postMessage(
+        { source: 'subsidy-chatbot', event: name, params: data },
+        EMBED_ORIGIN
+      );
+    } catch (e) {}
+  }
+}
+
 // ── データ読み込み ──────────────────────────────────────────
 let FLOW = null;
 let SUBSIDIES = null;
@@ -593,13 +631,11 @@ function savePath() {
 
 // 選択肢を選んだとき：現在ステップに選択を記録し、次のノードへ進む
 function selectChoice(choice) {
-  if (typeof gtag === 'function') {
-    gtag('event', 'choice_select', {
-      node_id: path[path.length - 1].nodeId,
-      choice_label: choice.label,
-      next_node: choice.next
-    });
-  }
+  track('choice_select', {
+    node_id: path[path.length - 1].nodeId,
+    choice_label: choice.label,
+    next_node: choice.next
+  });
   path[path.length - 1].choice = choice;
   path.push({ nodeId: choice.next, choice: null });
   savePath();
@@ -663,13 +699,11 @@ function render() {
 
     // 結果ノード（終端）
     if ('result' in node) {
-      if (typeof gtag === 'function') {
-        gtag('event', 'result_view', {
-          result_node: step.nodeId,
-          subsidy_ids: node.subsidies ? node.subsidies.join(',') : 'none',
-          result_type: node.result ? 'match' : 'no_match'
-        });
-      }
+      track('result_view', {
+        result_node: step.nodeId,
+        subsidy_ids: node.subsidies ? node.subsidies.join(',') : 'none',
+        result_type: node.result ? 'match' : 'no_match'
+      });
       resultWrap = addResultCard(node);
       break;
     }
@@ -742,9 +776,7 @@ document.getElementById('restartBtn').addEventListener('click', restart);
 
 // フィードバッククリックをGA4で計測
 document.getElementById('feedbackLink').addEventListener('click', function () {
-  if (typeof gtag === 'function') {
-    gtag('event', 'feedback_click', { event_category: 'engagement', event_label: 'feedback_form' });
-  }
+  track('feedback_click', { event_category: 'engagement', event_label: 'feedback_form' });
 });
 
 loadData().then(() => {
@@ -779,9 +811,9 @@ loadData().then(() => {
 (function() {
   var sent = false;
   setTimeout(function() {
-    if (!sent && typeof gtag === 'function') {
+    if (!sent) {
       sent = true;
-      gtag('event', 'stay_5mins');
+      track('stay_5mins');
     }
   }, 300000);
 })();
