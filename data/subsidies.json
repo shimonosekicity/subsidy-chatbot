@@ -7,7 +7,22 @@
       "conditions": "<span class='ch'>【対象になる方】（①②の両方を満たす方）</span><span class='ci'>①移住前の10年間で、通算5年以上、次のどちらかに当てはまる</span><span class='ci'>・東京23区に住んでいた</span><span class='ci'>・東京圏（埼玉・千葉・東京都・神奈川）に住み、<span class='nw'>23区へ通勤</span>していた</span><span class='cs'>※東京圏でも「条件不利地域」にお住まいだった場合は対象外</span><span class='ci'>②移住の直前1年間は、続けて<span class='nw'>23区に在住</span>、または<span class='nw'>23区へ通勤</span>していた</span><span class='ch'>【就業・起業の条件】（次のいずれか1つ）</span><span class='ci'>・「やまぐちジョブナビ」掲載の求人に就職（<span class='nw'>週20時間以上</span>・無期雇用）</span><span class='ci'>・テレワークで、移住前の勤務先の仕事を続ける</span><span class='ci'>・専門人材マッチング事業を利用して就職</span><span class='ci'>・「やまぐち創業補助金」の交付決定を受けて起業</span><span class='ch'>【その他】</span><span class='ci'>・下関市に<span class='nw'>5年以上</span>住み続ける意思があること</span>",
       "deadline": "転入後1年以内に申請",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
-      "url": "https://www.city.shimonoseki.lg.jp/soshiki/6/1122.html"
+      "url": "https://www.city.shimonoseki.lg.jp/soshiki/6/1122.html",
+      "steps": [
+        {
+          "when": "移住する前",
+          "what": "「やまぐちジョブナビ」に掲載されている対象求人か確認する",
+          "warn": true
+        },
+        {
+          "when": "就職・転入",
+          "what": "対象求人に就職し、下関市へ転入する"
+        },
+        {
+          "when": "就業から3か月経過後、転入後1年以内",
+          "what": "市へ申請する"
+        }
+      ]
     },
     "s002": {
       "name": "やまぐち創生テレワーク移住支援事業補助金（大都市圏からの移住）",
@@ -145,7 +160,22 @@
       "conditions": "<span class='ch'>【対象になる方】</span><span class='ci'>・山口県外にお住まいで、山口県（下関市）への移住を検討中の方</span><span class='ch'>【対象になる活動】（いずれか1つ）</span><span class='ci'>・移住のツアー・セミナー・フェアなどへの参加</span><span class='ci'>・暮らし体験・下見（移住に関する予定が旅程の半分を超えること）</span><span class='ci'>・就職・就農の面接（最終面接のみ）</span><span class='ch'>【補助されるもの】</span><span class='ci'>・公共交通機関の往復運賃（実費のみ）</span><span class='ci'>・福岡県・広島県にお住まいの方は、高速道路の利用料も対象</span><span class='ch'>【対象にならないもの】</span><span class='ci'>・タクシー、レンタカー、宿泊費、山口県内での移動費</span><span class='ci'>・クーポンやポイントで支払った分、フェリーの車両運搬料</span><span class='ch'>【回数】</span><span class='ci'>・<span class='nw'>1年度に1人1回</span>まで</span>",
       "deadline": "移住活動完了から30日以内に申請",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
-      "url": "https://ymg-uji.jp/support/transportation/"
+      "url": "https://ymg-uji.jp/support/transportation/",
+      "steps": [
+        {
+          "when": "訪問する前",
+          "what": "LiveHUBしものせき等の窓口へ相談・予約する",
+          "warn": true
+        },
+        {
+          "when": "訪問",
+          "what": "公共交通機関で山口県（下関市）を訪れ、移住活動を行う"
+        },
+        {
+          "when": "移住活動の完了から30日以内",
+          "what": "交通費の領収書などを添えて申請する"
+        }
+      ]
     },
     "s016": {
       "name": "下関市住宅取得支援事業補助金",
@@ -173,7 +203,22 @@
       "conditions": "<span class='ch'>【重要】転入する前に移住相談の実績が必要です</span><span class='ci'>・<span class='nw'>転入前2年以内</span>に、次のいずれかに当てはまること</span><span class='ci2'>－YY!ターン補助金の証明書の発行を受けた</span><span class='ci2'>－お試し暮らしを利用した</span><span class='ci2'>－移住フェアの個別相談に参加した</span><span class='ci2'>－移住体験ツアーに参加した</span><span class='ci2'>－移住相談窓口と<span class='nw'>2回以上</span>やりとりし、相談者台帳に記載された</span><span class='ci2'>－やまぐち暮らし支援センターと連携した</span><span class='ch'>【対象になる方】（すべて満たす方）</span><span class='ci'>・<span class='nw'>令和6年4月1日</span>以降に<span class='nw'>UIJターン</span>した</span><span class='ci'>・<span class='nw'>直近1年以上</span>、続けて市外に住んでいた</span><span class='ci'>・世帯主が<span class='nw'>39歳以下</span>、または中学生以下の子どもがいる</span><span class='ci'>・<span class='nw'>転入後6か月以内</span>に申請する</span><span class='ci'>・下関市に<span class='nw'>5年以上</span>住み続ける意思がある</span><span class='ci'>・市税の滞納がない</span><span class='ch'>【対象になる住まい】</span><span class='ci'>・民間の賃貸住宅（補助は<span class='nw'>最長2年間</span>）</span><span class='ch'>【対象にならない住まい】</span><span class='ci'>・市営住宅（公営住宅法に基づく住宅）</span><span class='ci'>・社宅、官舎、寮など勤務先から貸与された住宅</span><span class='ci'>・居住者以外の名義で契約した住宅</span><span class='ci'>・3親等以内の親族が所有する住宅</span>",
       "deadline": "令和8年度の新規申請は受付終了。令和9年度以降の再開状況はLiveHUBしものせきにお問い合わせください。",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
-      "url": "https://www.shimonosekicitypromotion.jp/123148.html"
+      "url": "https://www.shimonosekicitypromotion.jp/123148.html",
+      "steps": [
+        {
+          "when": "転入する前（2年以内）",
+          "what": "移住相談窓口へ相談するなど、相談の実績をつくる",
+          "warn": true
+        },
+        {
+          "when": "転入",
+          "what": "民間の賃貸住宅に住み、下関市へ転入する"
+        },
+        {
+          "when": "転入後6か月以内",
+          "what": "市へ申請する"
+        }
+      ]
     }
   }
 }
