@@ -168,9 +168,9 @@
     },
     "s015": {
       "name": "下関暮らしサポート補助金",
-      "summary": "【令和8年度の新規申請は受付終了】転入前にLiveHUBしものせき等の移住相談窓口に相談の上でUJIターンした世帯に、家賃の一部を最大2年間補助します。令和9年度以降の再開はLiveHUBにお問い合わせください。",
+      "summary": "転入前に移住相談を受けたうえでUIJターンした世帯に、家賃の一部を最長2年間補助します。",
       "amount": "世帯主39歳以下：月最大1万円（家賃1/2）／中学生以下の子あり：月最大2万円（家賃1/2）",
-      "conditions": "【重要】転入前にLiveHUBしものせき等の移住相談窓口に相談することが必須条件です。令和6年4月1日以降にUJIターン、世帯主39歳以下または中学生以下の子がいる世帯、転入後6ヶ月以内に初回申請、5年以上の定住意思、市税滞納なし、市営住宅・社宅・3親等以内親族所有住宅は対象外",
+      "conditions": "<span class='ch'>【重要】転入する前に移住相談の実績が必要です</span><span class='ci'>・<span class='nw'>転入前2年以内</span>に、次のいずれかに当てはまること</span><span class='ci2'>－YY!ターン補助金の証明書の発行を受けた</span><span class='ci2'>－お試し暮らしを利用した</span><span class='ci2'>－移住フェアの個別相談に参加した</span><span class='ci2'>－移住体験ツアーに参加した</span><span class='ci2'>－移住相談窓口と<span class='nw'>2回以上</span>やりとりし、相談者台帳に記載された</span><span class='ci2'>－やまぐち暮らし支援センターと連携した</span><span class='ch'>【対象になる方】（すべて満たす方）</span><span class='ci'>・<span class='nw'>令和6年4月1日</span>以降に<span class='nw'>UIJターン</span>した</span><span class='ci'>・<span class='nw'>直近1年以上</span>、続けて市外に住んでいた</span><span class='ci'>・世帯主が<span class='nw'>39歳以下</span>、または中学生以下の子どもがいる</span><span class='ci'>・<span class='nw'>転入後6か月以内</span>に申請する</span><span class='ci'>・下関市に<span class='nw'>5年以上</span>住み続ける意思がある</span><span class='ci'>・市税の滞納がない</span><span class='ch'>【対象になる住まい】</span><span class='ci'>・民間の賃貸住宅（補助は<span class='nw'>最長2年間</span>）</span><span class='ch'>【対象にならない住まい】</span><span class='ci'>・市営住宅（公営住宅法に基づく住宅）</span><span class='ci'>・社宅、官舎、寮など勤務先から貸与された住宅</span><span class='ci'>・居住者以外の名義で契約した住宅</span><span class='ci'>・3親等以内の親族が所有する住宅</span>",
       "deadline": "令和8年度の新規申請は受付終了。令和9年度以降の再開状況はLiveHUBしものせきにお問い合わせください。",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
       "url": "https://www.shimonosekicitypromotion.jp/123148.html"
