@@ -121,10 +121,16 @@
     "choices": [
       { "label": "テレワークで現職を継続予定", "next": "migration_tokyo_area" },
       { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_tokyo_area" },
-      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_tokyo_area" },
+      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "jobnavi_notice_tokyo" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s001_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" },
       { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
+    ]
+  },
+  "jobnavi_notice_tokyo": {
+    "message": "「やまぐちジョブナビ」の求人が「移住支援金対象求人」と明記されているか確認してください。\n週20時間以上・無期雇用の求人でも、この表記がない場合は移住支援金の対象外となります。",
+    "choices": [
+      { "label": "確認しました。次へ進む", "next": "migration_tokyo_area" }
     ]
   },
   "migration_tokyo_area": {
@@ -144,10 +150,16 @@
     "choices": [
       { "label": "テレワークで現職を継続予定", "next": "migration_metro_area" },
       { "label": "やまぐち専門人材マッチング事業を利用予定", "next": "migration_metro_area" },
-      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "migration_metro_area" },
+      { "label": "やまぐちジョブナビ掲載の求人に就業予定", "next": "jobnavi_notice_metro" },
       { "label": "やまぐち創業補助金を受けて創業予定", "next": "result_s002_sogyou" },
       { "label": "就業先はまだ決まっていない", "next": "no_match_migration" },
       { "label": "上記以外の方法で就職予定", "next": "no_match_employment" }
+    ]
+  },
+  "jobnavi_notice_metro": {
+    "message": "「やまぐちジョブナビ」の求人が「移住支援金対象求人」と明記されているか確認してください。\n週20時間以上・無期雇用の求人でも、この表記がない場合は移住支援金の対象外となります。",
+    "choices": [
+      { "label": "確認しました。次へ進む", "next": "migration_metro_area" }
     ]
   },
   "migration_metro_area": {
