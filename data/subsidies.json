@@ -10,11 +10,6 @@
       "url": "https://www.city.shimonoseki.lg.jp/soshiki/6/1122.html",
       "steps": [
         {
-          "when": "移住する前",
-          "what": "「やまぐちジョブナビ」に掲載されている対象求人か確認する",
-          "warn": true
-        },
-        {
           "when": "就職・転入",
           "what": "対象求人に就職し、下関市へ転入する"
         },
