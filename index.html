@@ -213,6 +213,7 @@ body{top:0 !important;position:relative !important;}
 .profile-lead{font-size:.85rem;color:var(--ink-soft);margin-bottom:18px;line-height:1.7;}
 .profile-field{margin-bottom:18px;}
 .profile-label{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.profile-label-note{font-size:.74rem;font-weight:600;color:var(--ink-soft);margin-left:6px;}
 .chip-group{display:flex;flex-wrap:wrap;gap:8px;}
 .chip-btn{-webkit-appearance:none;appearance:none;background:#fff;border:1.5px solid var(--line-strong);color:var(--ink);border-radius:99px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s,color .15s,border-color .15s;white-space:nowrap;flex-shrink:0;}
 .chip-btn:hover{border-color:var(--navy);}
@@ -395,7 +396,7 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
 <!-- 事前アンケートモーダル（任意・スキップ可） -->
 <div class="modal-overlay hidden" id="profileModal">
   <div class="modal-box profile-box">
-    <h2>📝 かんたん事前アンケート（任意）</h2>
+    <h2>📝 かんたん事前アンケート</h2>
     <p class="profile-lead">あと少し詳しく教えていただくと、より的確にご案内できます。15秒ほどで終わります。答えたくない項目はそのままで大丈夫です。</p>
 
     <div class="profile-field">
@@ -491,8 +492,8 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     </div>
 
     <div class="profile-field">
-      <div class="profile-label">移住のきっかけ</div>
-      <div class="chip-group" data-field="reason">
+      <div class="profile-label">移住のきっかけ<span class="profile-label-note">（複数選択可）</span></div>
+      <div class="chip-group" data-field="reason" data-multi="true">
         <button type="button" class="chip-btn" data-value="自然環境・子育て">自然環境・子育て</button>
         <button type="button" class="chip-btn" data-value="リモートワーク・住環境">リモートワーク・住環境</button>
         <button type="button" class="chip-btn" data-value="地方への興味・つながり">地方への興味・つながり</button>
@@ -961,10 +962,17 @@ document.getElementById('agreeBtn').addEventListener('click', () => {
 
 // ── 事前アンケートモーダル ──────────────────────────────────
 document.querySelectorAll('.chip-group').forEach(group => {
+  const isMulti = group.dataset.multi === 'true';
   group.querySelectorAll('.chip-btn').forEach(btn => {
     btn.addEventListener('click', () => {
-      group.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
+      if (isMulti) {
+        // 複数選択：クリックしたチップだけをトグルする
+        btn.classList.toggle('selected');
+      } else {
+        // 単一選択：他の選択を解除してから選ぶ
+        group.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+      }
     });
   });
 });
@@ -972,6 +980,11 @@ document.querySelectorAll('.chip-group').forEach(group => {
 function getSelectedChip(field) {
   const el = document.querySelector(`.chip-group[data-field="${field}"] .chip-btn.selected`);
   return el ? el.dataset.value : '';
+}
+
+function getSelectedChips(field) {
+  const els = document.querySelectorAll(`.chip-group[data-field="${field}"] .chip-btn.selected`);
+  return Array.from(els).map(el => el.dataset.value);
 }
 
 // ── 「いまの住まい」カスタムドロップダウン（常に下方向へ展開） ──
@@ -1010,7 +1023,7 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
     current_residence: selectedResidence || 'unanswered',
     household_size: getSelectedChip('household') || 'unanswered',
     target_area: getSelectedChip('area') || 'unanswered',
-    migration_reason: getSelectedChip('reason') || 'unanswered'
+    migration_reason: getSelectedChips('reason').join('、') || 'unanswered'
   });
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
