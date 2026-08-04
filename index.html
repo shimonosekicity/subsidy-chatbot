@@ -497,7 +497,7 @@ function addBubble(text, who) {
 const CHOICE_ICONS = [
   // カテゴリ（最初の画面）
   { keywords: ['移住・転入'],                icon: '🚢' },
-  { keywords: ['住宅を取得', '住宅を購入', '住宅を建築'], icon: '🏠' },
+  { keywords: ['住宅を取得', '住宅を購入', '住宅を建築', '住宅を賃貸', '賃貸住宅に住みたい'], icon: '🏠' },
   { keywords: ['空き家', '空き店舗'],        icon: '🏚️' },
   { keywords: ['結婚', '子育て', '妊娠'],    icon: '👶' },
   { keywords: ['就職', '就農', '起業'],      icon: '💼' },
@@ -547,6 +547,7 @@ const CHOICE_ICONS = [
   { keywords: ['YY!ターン', '交通費補助'],   icon: '🚌' },
   { keywords: ['お試し暮らし'],              icon: '🏠' },
   // はい/いいえ（短いラベルのみ）
+  { keywords: ['すでに市内に住んでいる'], icon: '🏠' },
   { keywords: ['はい'],   icon: '✅', maxLen: 6 },
   { keywords: ['いいえ'], icon: '❌', maxLen: 6 },
   // その他・わからない
