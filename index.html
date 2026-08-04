@@ -37,7 +37,7 @@
 /* iframe埋め込み時、iOSでは100vhが実際の枠の高さと一致しないことがあるため、
    高さは html からの % で受け渡す（枠の高さと必ず一致させる） */
 /* 背景色は html 側に置く。body に背景があると、背面(z-index:-1)の波が隠れるため。 */
-html{-webkit-text-size-adjust:100%;height:100%;background:var(--bg);}
+html{-webkit-text-size-adjust:100%;height:100%;background:var(--bg);color-scheme:light;}
 body{font-family:var(--font);color:var(--ink);background:transparent;
   display:flex;flex-direction:column;min-height:100%;padding-bottom:104px;
   line-height:1.6;-webkit-font-smoothing:antialiased;}
@@ -207,6 +207,18 @@ body{top:0 !important;position:relative !important;}
 .modal-agree-btn{width:100%;background:linear-gradient(135deg,var(--navy),#0a4f8f);color:#fff;border:none;border-radius:99px;padding:14px;font-size:.96rem;font-weight:700;cursor:pointer;transition:filter .16s,transform .1s;font-family:var(--font);}
 .modal-agree-btn:hover{filter:brightness(1.08);transform:translateY(-1px);}
 .modal-agree-btn:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
+/* ── 事前アンケートモーダル ── */
+.profile-box{max-width:460px;}
+.profile-lead{font-size:.85rem;color:var(--ink-soft);margin-bottom:18px;line-height:1.7;}
+.profile-field{margin-bottom:18px;}
+.profile-label{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.chip-group{display:flex;flex-wrap:wrap;gap:8px;}
+.chip-btn{-webkit-appearance:none;appearance:none;background:#fff;border:1.5px solid var(--line-strong);color:var(--ink);border-radius:99px;padding:8px 14px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:var(--font);transition:background .15s,color .15s,border-color .15s;line-break:strict;word-break:break-word;}
+.chip-btn:hover{border-color:var(--navy);}
+.chip-btn.selected{background:var(--navy);border-color:var(--navy);color:#fff;}
+.profile-select{-webkit-appearance:none;appearance:none;width:100%;padding:11px 12px;border:1.5px solid var(--line-strong);border-radius:10px;font-size:.86rem;font-family:var(--font);color:var(--ink);background:#fff;}
+.profile-actions{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
+.profile-skip-btn{background:none;border:none;color:var(--ink-soft);font-size:.82rem;text-decoration:underline;cursor:pointer;font-family:var(--font);padding:4px;align-self:center;}
 
 /* ── フッター ── */
 /* 背景の波と重なっても読めるよう、フッターの文字は少し濃くする（コントラスト比5.0:1） */
@@ -367,6 +379,109 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       </li>
     </ul>
     <button class="modal-agree-btn" id="agreeBtn">上記に同意して利用を開始する</button>
+  </div>
+</div>
+
+<!-- 事前アンケートモーダル（任意・スキップ可） -->
+<div class="modal-overlay hidden" id="profileModal">
+  <div class="modal-box profile-box">
+    <h2>📝 かんたん事前アンケート（任意）</h2>
+    <p class="profile-lead">あと少し詳しく教えていただくと、より的確にご案内できます。15秒ほどで終わります。答えたくない項目はそのままで大丈夫です。</p>
+
+    <div class="profile-field">
+      <div class="profile-label">年齢</div>
+      <div class="chip-group" data-field="age">
+        <button type="button" class="chip-btn" data-value="10代以下">10代以下</button>
+        <button type="button" class="chip-btn" data-value="20代">20代</button>
+        <button type="button" class="chip-btn" data-value="30代">30代</button>
+        <button type="button" class="chip-btn" data-value="40代">40代</button>
+        <button type="button" class="chip-btn" data-value="50代">50代</button>
+        <button type="button" class="chip-btn" data-value="60代以上">60代以上</button>
+      </div>
+    </div>
+
+    <div class="profile-field">
+      <div class="profile-label">いまの住まい</div>
+      <select class="profile-select" id="profileHometown">
+        <option value="">選択してください</option>
+        <option value="北海道">北海道</option>
+        <option value="青森県">青森県</option>
+        <option value="岩手県">岩手県</option>
+        <option value="宮城県">宮城県</option>
+        <option value="秋田県">秋田県</option>
+        <option value="山形県">山形県</option>
+        <option value="福島県">福島県</option>
+        <option value="茨城県">茨城県</option>
+        <option value="栃木県">栃木県</option>
+        <option value="群馬県">群馬県</option>
+        <option value="埼玉県">埼玉県</option>
+        <option value="千葉県">千葉県</option>
+        <option value="東京都">東京都</option>
+        <option value="神奈川県">神奈川県</option>
+        <option value="新潟県">新潟県</option>
+        <option value="富山県">富山県</option>
+        <option value="石川県">石川県</option>
+        <option value="福井県">福井県</option>
+        <option value="山梨県">山梨県</option>
+        <option value="長野県">長野県</option>
+        <option value="岐阜県">岐阜県</option>
+        <option value="静岡県">静岡県</option>
+        <option value="愛知県">愛知県</option>
+        <option value="三重県">三重県</option>
+        <option value="滋賀県">滋賀県</option>
+        <option value="京都府">京都府</option>
+        <option value="大阪府">大阪府</option>
+        <option value="兵庫県">兵庫県</option>
+        <option value="奈良県">奈良県</option>
+        <option value="和歌山県">和歌山県</option>
+        <option value="鳥取県">鳥取県</option>
+        <option value="島根県">島根県</option>
+        <option value="岡山県">岡山県</option>
+        <option value="広島県">広島県</option>
+        <option value="山口県">山口県</option>
+        <option value="徳島県">徳島県</option>
+        <option value="香川県">香川県</option>
+        <option value="愛媛県">愛媛県</option>
+        <option value="高知県">高知県</option>
+        <option value="福岡県">福岡県</option>
+        <option value="佐賀県">佐賀県</option>
+        <option value="長崎県">長崎県</option>
+        <option value="熊本県">熊本県</option>
+        <option value="大分県">大分県</option>
+        <option value="宮崎県">宮崎県</option>
+        <option value="鹿児島県">鹿児島県</option>
+        <option value="沖縄県">沖縄県</option>
+        <option value="海外">海外</option>
+      </select>
+    </div>
+
+    <div class="profile-field">
+      <div class="profile-label">家族構成（同居予定の人数）</div>
+      <div class="chip-group" data-field="household">
+        <button type="button" class="chip-btn" data-value="1人（単身）">1人（単身）</button>
+        <button type="button" class="chip-btn" data-value="2人">2人</button>
+        <button type="button" class="chip-btn" data-value="3人">3人</button>
+        <button type="button" class="chip-btn" data-value="4人">4人</button>
+        <button type="button" class="chip-btn" data-value="5人以上">5人以上</button>
+      </div>
+    </div>
+
+    <div class="profile-field">
+      <div class="profile-label">移住希望エリア</div>
+      <div class="chip-group" data-field="area">
+        <button type="button" class="chip-btn" data-value="豊浦町">豊浦町</button>
+        <button type="button" class="chip-btn" data-value="豊北町">豊北町</button>
+        <button type="button" class="chip-btn" data-value="菊川町">菊川町</button>
+        <button type="button" class="chip-btn" data-value="豊田町">豊田町</button>
+        <button type="button" class="chip-btn" data-value="その他下関市内">その他下関市内</button>
+        <button type="button" class="chip-btn" data-value="まだ決まっていない">まだ決まっていない</button>
+      </div>
+    </div>
+
+    <div class="profile-actions">
+      <button class="modal-agree-btn" id="profileSubmitBtn">回答して始める</button>
+      <button type="button" class="profile-skip-btn" id="profileSkipBtn">スキップする</button>
+    </div>
   </div>
 </div>
 
@@ -651,8 +766,9 @@ let path = [];
 const INTRO = 'こんにちは！下関市の補助金・給付金をご案内します。\nいくつかの質問に答えていただくだけで、ご利用いただける可能性のある補助金をお調べします。';
 
 // sessionStorageキー
-const SS_PATH  = 'subsidy_path';
-const SS_MODAL = 'subsidy_modal_agreed';
+const SS_PATH    = 'subsidy_path';
+const SS_MODAL   = 'subsidy_modal_agreed';
+const SS_PROFILE = 'subsidy_profile_done';
 
 // sessionStorageは、他サイトへiframe埋め込みした場合（クロスオリジン）や
 // プライベートブラウズでは、アクセスしただけで例外が発生することがある。
@@ -807,11 +923,49 @@ function updateProgress() {
 // モーダル同意済みなら再読み込み時はスキップ
 if (ssGet(SS_MODAL) === '1') {
   document.getElementById('modalOverlay').classList.add('hidden');
+  if (ssGet(SS_PROFILE) !== '1') {
+    document.getElementById('profileModal').classList.remove('hidden');
+  }
 }
 
 document.getElementById('agreeBtn').addEventListener('click', () => {
   document.getElementById('modalOverlay').classList.add('hidden');
   ssSet(SS_MODAL, '1');
+  if (ssGet(SS_PROFILE) !== '1') {
+    document.getElementById('profileModal').classList.remove('hidden');
+  }
+});
+
+// ── 事前アンケートモーダル ──────────────────────────────────
+document.querySelectorAll('.chip-group').forEach(group => {
+  group.querySelectorAll('.chip-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      group.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+    });
+  });
+});
+
+function getSelectedChip(field) {
+  const el = document.querySelector(`.chip-group[data-field="${field}"] .chip-btn.selected`);
+  return el ? el.dataset.value : '';
+}
+
+document.getElementById('profileSubmitBtn').addEventListener('click', () => {
+  track('profile_survey', {
+    age_group: getSelectedChip('age') || 'unanswered',
+    current_residence: document.getElementById('profileHometown').value || 'unanswered',
+    household_size: getSelectedChip('household') || 'unanswered',
+    target_area: getSelectedChip('area') || 'unanswered'
+  });
+  ssSet(SS_PROFILE, '1');
+  document.getElementById('profileModal').classList.add('hidden');
+});
+
+document.getElementById('profileSkipBtn').addEventListener('click', () => {
+  track('profile_survey_skip');
+  ssSet(SS_PROFILE, '1');
+  document.getElementById('profileModal').classList.add('hidden');
 });
 
 document.getElementById('header-icon-btn').addEventListener('click', restart);
