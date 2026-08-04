@@ -3,7 +3,7 @@
     "message": "あなたのご状況に近いものを選んでください。",
     "choices": [
       { "label": "移住・転入を考えている", "next": "migration" },
-      { "label": "住宅を取得・改修したい", "next": "housing" },
+      { "label": "住宅を賃貸・取得・改修したい", "next": "housing" },
       { "label": "空き家・空き店舗を活用したい", "next": "vacant" },
       { "label": "結婚・子育て・妊娠について", "next": "family" },
       { "label": "就職・就農・起業について", "next": "work" }
@@ -185,10 +185,18 @@
   "housing": {
     "message": "住宅に関するご状況を教えてください。",
     "choices": [
+      { "label": "賃貸住宅に住みたい", "next": "housing_rental_check" },
       { "label": "住所が変わる（市外から転入、または市内で転居）して住宅を取得したい", "next": "housing_acquisition" },
       { "label": "空き家バンクの物件を購入して改修したい", "next": "akiya_age" },
       { "label": "下関駅周辺の空き家を取り壊したい", "next": "result_s007" },
       { "label": "所有している空き家の管理を業者に依頼したい", "next": "result_s008" }
+    ]
+  },
+  "housing_rental_check": {
+    "message": "市外から下関市へ転入する（または転入した）予定はありますか？",
+    "choices": [
+      { "label": "はい、市外から転入する（した）", "next": "migration_kurashi" },
+      { "label": "いいえ、すでに市内に住んでいる", "next": "no_match" }
     ]
   },
   "housing_acquisition": {
