@@ -247,6 +247,8 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
   .nav-btn{font-size:.82rem;padding:8px 15px;}
   #chat{padding:14px 12px;gap:11px;}
   footer{text-align:left;}
+  .profile-box{max-width:300px;padding:20px 16px 16px;}
+  .chip-btn{padding:7px 12px;font-size:.8rem;}
 }
 @media (prefers-reduced-motion:reduce){
   *{transition:none !important;animation:none !important;scroll-behavior:auto !important;}
@@ -485,6 +487,17 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
         <button type="button" class="chip-btn" data-value="豊田町">豊田町</button>
         <button type="button" class="chip-btn" data-value="その他下関市内">その他下関市内</button>
         <button type="button" class="chip-btn" data-value="まだ決まっていない">まだ決まっていない</button>
+      </div>
+    </div>
+
+    <div class="profile-field">
+      <div class="profile-label">移住のきっかけ</div>
+      <div class="chip-group" data-field="reason">
+        <button type="button" class="chip-btn" data-value="自然環境・子育て">自然環境・子育て</button>
+        <button type="button" class="chip-btn" data-value="リモートワーク・住環境">リモートワーク・住環境</button>
+        <button type="button" class="chip-btn" data-value="地方への興味・つながり">地方への興味・つながり</button>
+        <button type="button" class="chip-btn" data-value="ライフステージの変化">ライフステージの変化</button>
+        <button type="button" class="chip-btn" data-value="生き方・働き方の見直し">生き方・働き方の見直し</button>
       </div>
     </div>
 
@@ -996,7 +1009,8 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
     age_group: getSelectedChip('age') || 'unanswered',
     current_residence: selectedResidence || 'unanswered',
     household_size: getSelectedChip('household') || 'unanswered',
-    target_area: getSelectedChip('area') || 'unanswered'
+    target_area: getSelectedChip('area') || 'unanswered',
+    migration_reason: getSelectedChip('reason') || 'unanswered'
   });
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
