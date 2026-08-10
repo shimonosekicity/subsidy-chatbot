@@ -63,7 +63,7 @@
     ]
   },
   "migration_purchase_rural_birth": {
-    "message": "過疎地域で第3子以降のお子さまを出産予定（または現在養育中）ですか？",
+    "message": "第3子以降のお子さまを出産予定（または現在養育中）ですか？",
     "choices": [
       { "label": "はい", "next": "result_s003_s004_s016" },
       { "label": "いいえ", "next": "result_s003_s016" }
