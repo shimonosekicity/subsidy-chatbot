@@ -638,7 +638,13 @@ function addBubble(text, who) {
   wrap.className = `bubble-wrap ${who}`;
   const b = document.createElement('div');
   b.className = `bubble ${who}`;
-  b.textContent = text;
+  // bot側のメッセージはflow.json（自前管理・信頼済み）由来のHTMLを許可する。
+  // ユーザーの回答（選択肢ラベルのエコー表示）はテキストのままで十分なので変更しない。
+  if (who === 'bot') {
+    b.innerHTML = text;
+  } else {
+    b.textContent = text;
+  }
   wrap.appendChild(who === 'bot' ? withAvatar(b) : b);
   chat.appendChild(wrap);
   scrollBottom();
