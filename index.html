@@ -212,6 +212,7 @@ body{top:0 !important;position:relative !important;}
 .profile-box{max-width:460px;}
 .profile-lead{font-size:.85rem;color:var(--ink-soft);margin-bottom:18px;line-height:1.7;}
 .profile-field{margin-bottom:18px;}
+.profile-field.hidden{display:none;}
 .profile-label{font-size:.82rem;font-weight:700;color:var(--navy);margin-bottom:8px;}
 .profile-label-note{font-size:.74rem;font-weight:600;color:var(--ink-soft);margin-left:6px;}
 .chip-group{display:flex;flex-wrap:wrap;gap:8px;}
@@ -467,6 +468,15 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
           <li role="option" data-value="沖縄県">沖縄県</li>
           <li role="option" data-value="海外">海外</li>
         </ul>
+      </div>
+    </div>
+
+    <!-- 「東京都」を選んだときだけ表示する（移住支援金の要件に関わるため） -->
+    <div class="profile-field hidden" id="wardField">
+      <div class="profile-label">東京都のどちらにお住まいですか？</div>
+      <div class="chip-group" data-field="ward">
+        <button type="button" class="chip-btn" data-value="23区内">23区内</button>
+        <button type="button" class="chip-btn" data-value="23区外">23区外</button>
       </div>
     </div>
 
@@ -1000,6 +1010,8 @@ residenceToggle.addEventListener('click', () => {
   residenceToggle.setAttribute('aria-expanded', String(willOpen));
 });
 
+const wardField = document.getElementById('wardField');
+
 residenceList.querySelectorAll('li').forEach(li => {
   li.addEventListener('click', () => {
     selectedResidence = li.dataset.value;
@@ -1009,6 +1021,14 @@ residenceList.querySelectorAll('li').forEach(li => {
     li.classList.add('active');
     residenceList.classList.add('hidden');
     residenceToggle.setAttribute('aria-expanded', 'false');
+
+    // 東京都のときだけ「23区内／23区外」を尋ねる。
+    // 他の都道府県に選び直したら、選択済みの区分はリセットする。
+    const isTokyo = selectedResidence === '東京都';
+    wardField.classList.toggle('hidden', !isTokyo);
+    if (!isTokyo) {
+      wardField.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+    }
   });
 });
 
@@ -1020,13 +1040,19 @@ document.addEventListener('click', (e) => {
 });
 
 document.getElementById('profileSubmitBtn').addEventListener('click', () => {
-  track('profile_survey', {
+  const params = {
     age_group: getSelectedChip('age') || 'unanswered',
     current_residence: selectedResidence || 'unanswered',
     household_size: getSelectedChip('household') || 'unanswered',
     target_area: getSelectedChip('area') || 'unanswered',
     migration_reason: getSelectedChips('reason').join('、') || 'unanswered'
-  });
+  };
+  // 東京都以外の方には尋ねていない項目なので、その場合は送信しない
+  // （GA4側では「(not set)」となり、集計から自然に除外される）
+  if (selectedResidence === '東京都') {
+    params.tokyo_ward = getSelectedChip('ward') || 'unanswered';
+  }
+  track('profile_survey', params);
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
 });
