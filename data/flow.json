@@ -280,10 +280,23 @@
   "work": {
     "message": "就職・就農・起業についてどのようなご状況ですか？",
     "choices": [
-      { "label": "奨学金を返還中で下関市内に就職・起業したい", "next": "result_s013" },
+      { "label": "奨学金を返還中で下関市内に就職・起業したい", "next": "work_scholarship_migration_check" },
       { "label": "農業に興味があり就農体験したい（50歳未満）", "next": "result_s014" },
+      { "label": "農業法人に雇用されて移住就農したい", "next": "result_s020" },
       { "label": "空き物件でお店を開業したい", "next": "result_s009" }
     ]
+  },
+  "work_scholarship_migration_check": {
+    "message": "市外から下関市へ転入する（または転入した）予定はありますか？",
+    "choices": [
+      { "label": "はい、市外から転入する（した）", "next": "result_s013_migration_note" },
+      { "label": "いいえ、すでに市内に住んでいる", "next": "result_s013" }
+    ]
+  },
+  "result_s013_migration_note": {
+    "result": true,
+    "subsidies": ["s013"],
+    "message": "奨学金返還支援補助金に該当する可能性があります。大学在学中のエントリーが必要な場合があります。<br><br>また、市外からの転入に伴い、<strong>移住支援金</strong>（就業先が「やまぐちジョブナビ」対象求人・テレワーク継続・やまぐち創業補助金のいずれかに該当する場合）も対象になる可能性があります。就業状況によって対象条件が異なるため、改めてこのナビの「移住・転入を考えている」からご確認いただくか、LiveHUBしものせき（0120-540-201）にご相談ください。"
   },
 
   "result_s001": {
@@ -390,6 +403,11 @@
     "result": true,
     "subsidies": ["s014"],
     "message": "ヤングファーマーズサポート事業に該当する可能性があります。令和8年5月29日締切です。"
+  },
+  "result_s020": {
+    "result": true,
+    "subsidies": ["s020"],
+    "message": "新たな農業経営者等育成実践モデル事業に該当する可能性があります。対象は農業法人等に雇用される移住就農者です。詳細な要件は農業振興課へご確認ください。"
   },
   "result_s015": {
     "result": true,
