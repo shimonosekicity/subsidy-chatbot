@@ -156,13 +156,13 @@
   "migration_tokyo_area": {
     "message": "定住先を教えてください。",
     "choices": [
-      { "label": "豊田町", "next": "result_s001_s003" },
-      { "label": "豊浦町", "next": "result_s001_s003" },
-      { "label": "豊北町", "next": "result_s001_s003" },
-      { "label": "菊川町", "next": "result_s001" },
-      { "label": "蓋井島", "next": "result_s001_s003" },
-      { "label": "六連島", "next": "result_s001_s003" },
-      { "label": "上記以外の地域", "next": "result_s001" }
+      { "label": "豊田町", "next": "migration_tokyo_rental_check_s003" },
+      { "label": "豊浦町", "next": "migration_tokyo_rental_check_s003" },
+      { "label": "豊北町", "next": "migration_tokyo_rental_check_s003" },
+      { "label": "菊川町", "next": "migration_tokyo_rental_check" },
+      { "label": "蓋井島", "next": "migration_tokyo_rental_check_s003" },
+      { "label": "六連島", "next": "migration_tokyo_rental_check_s003" },
+      { "label": "上記以外の地域", "next": "migration_tokyo_rental_check" }
     ]
   },
 
@@ -186,13 +186,79 @@
   "migration_metro_area": {
     "message": "定住先を教えてください。",
     "choices": [
-      { "label": "豊田町", "next": "result_s002_s003" },
-      { "label": "豊浦町", "next": "result_s002_s003" },
-      { "label": "豊北町", "next": "result_s002_s003" },
-      { "label": "菊川町", "next": "result_s002" },
-      { "label": "蓋井島", "next": "result_s002_s003" },
-      { "label": "六連島", "next": "result_s002_s003" },
-      { "label": "上記以外の地域", "next": "result_s002" }
+      { "label": "豊田町", "next": "migration_metro_rental_check_s003" },
+      { "label": "豊浦町", "next": "migration_metro_rental_check_s003" },
+      { "label": "豊北町", "next": "migration_metro_rental_check_s003" },
+      { "label": "菊川町", "next": "migration_metro_rental_check" },
+      { "label": "蓋井島", "next": "migration_metro_rental_check_s003" },
+      { "label": "六連島", "next": "migration_metro_rental_check_s003" },
+      { "label": "上記以外の地域", "next": "migration_metro_rental_check" }
+    ]
+  },
+
+  "migration_tokyo_rental_check": {
+    "message": "移住後の住まいはどのようにお考えですか？",
+    "choices": [
+      { "label": "民間賃貸住宅に住む予定（世帯主39歳以下、または中学生以下の子あり）", "next": "result_s001_s015" },
+      { "label": "民間賃貸住宅に住む予定（上記に当てはまらない）", "next": "result_s001" },
+      { "label": "住宅を購入・建築する予定", "next": "migration_tokyo_purchase_age" },
+      { "label": "まだ決まっていない・わからない", "next": "result_s001" }
+    ]
+  },
+  "migration_tokyo_rental_check_s003": {
+    "message": "移住後の住まいはどのようにお考えですか？",
+    "choices": [
+      { "label": "民間賃貸住宅に住む予定（世帯主39歳以下、または中学生以下の子あり）", "next": "result_s001_s003_s015" },
+      { "label": "民間賃貸住宅に住む予定（上記に当てはまらない）", "next": "result_s001_s003" },
+      { "label": "住宅を購入・建築する予定", "next": "migration_tokyo_purchase_age_s003" },
+      { "label": "まだ決まっていない・わからない", "next": "result_s001_s003" }
+    ]
+  },
+  "migration_metro_rental_check": {
+    "message": "移住後の住まいはどのようにお考えですか？",
+    "choices": [
+      { "label": "民間賃貸住宅に住む予定（世帯主39歳以下、または中学生以下の子あり）", "next": "result_s002_s015" },
+      { "label": "民間賃貸住宅に住む予定（上記に当てはまらない）", "next": "result_s002" },
+      { "label": "住宅を購入・建築する予定", "next": "migration_metro_purchase_age" },
+      { "label": "まだ決まっていない・わからない", "next": "result_s002" }
+    ]
+  },
+  "migration_metro_rental_check_s003": {
+    "message": "移住後の住まいはどのようにお考えですか？",
+    "choices": [
+      { "label": "民間賃貸住宅に住む予定（世帯主39歳以下、または中学生以下の子あり）", "next": "result_s002_s003_s015" },
+      { "label": "民間賃貸住宅に住む予定（上記に当てはまらない）", "next": "result_s002_s003" },
+      { "label": "住宅を購入・建築する予定", "next": "migration_metro_purchase_age_s003" },
+      { "label": "まだ決まっていない・わからない", "next": "result_s002_s003" }
+    ]
+  },
+
+  "migration_tokyo_purchase_age": {
+    "message": "住宅取得時点で29歳以下で、住宅ローンを組む予定はありますか？",
+    "choices": [
+      { "label": "29歳以下で住宅ローンを組む予定", "next": "result_s001_s005_s016" },
+      { "label": "30歳以上、またはローンなし・現金購入", "next": "result_s001_s016" }
+    ]
+  },
+  "migration_tokyo_purchase_age_s003": {
+    "message": "住宅取得時点で29歳以下で、住宅ローンを組む予定はありますか？",
+    "choices": [
+      { "label": "29歳以下で住宅ローンを組む予定", "next": "result_s001_s003_s005_s016" },
+      { "label": "30歳以上、またはローンなし・現金購入", "next": "result_s001_s003_s016" }
+    ]
+  },
+  "migration_metro_purchase_age": {
+    "message": "住宅取得時点で29歳以下で、住宅ローンを組む予定はありますか？",
+    "choices": [
+      { "label": "29歳以下で住宅ローンを組む予定", "next": "result_s002_s005_s016" },
+      { "label": "30歳以上、またはローンなし・現金購入", "next": "result_s002_s016" }
+    ]
+  },
+  "migration_metro_purchase_age_s003": {
+    "message": "住宅取得時点で29歳以下で、住宅ローンを組む予定はありますか？",
+    "choices": [
+      { "label": "29歳以下で住宅ローンを組む予定", "next": "result_s002_s003_s005_s016" },
+      { "label": "30歳以上、またはローンなし・現金購入", "next": "result_s002_s003_s016" }
     ]
   },
 
@@ -420,10 +486,70 @@
     "subsidies": ["s001", "s003"],
     "message": "移住支援金（東京23区）と定住奨励金の両方に該当する可能性があります。それぞれ条件・申請窓口が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
   },
+  "result_s001_s015": {
+    "result": true,
+    "subsidies": ["s001", "s015"],
+    "message": "移住支援金（東京23区からの移住）に該当する可能性があります。あわせて下関暮らしサポート補助金（家賃補助）も対象になり得ますが、<span style=\"color:#c00;font-weight:bold;\">【令和8年度の新規申請は受付終了】</span>しています。令和9年度以降の再開状況はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s001_s003_s015": {
+    "result": true,
+    "subsidies": ["s001", "s003", "s015"],
+    "message": "移住支援金（東京23区）・定住奨励金の両方に該当する可能性があります。あわせて下関暮らしサポート補助金（家賃補助）も対象になり得ますが、<span style=\"color:#c00;font-weight:bold;\">【令和8年度の新規申請は受付終了】</span>しています。令和9年度以降の再開状況やそれぞれの詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s001_s016": {
+    "result": true,
+    "subsidies": ["s001", "s016"],
+    "message": "移住支援金（東京23区からの移住）と住宅取得支援事業補助金の両方に該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s001_s005_s016": {
+    "result": true,
+    "subsidies": ["s001", "s005", "s016"],
+    "message": "移住支援金（東京23区からの移住）・やまぐち若者定住応援事業補助金・住宅取得支援事業補助金の3つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s001_s003_s016": {
+    "result": true,
+    "subsidies": ["s001", "s003", "s016"],
+    "message": "移住支援金（東京23区）・定住奨励金・住宅取得支援事業補助金の3つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金・定住奨励金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s001_s003_s005_s016": {
+    "result": true,
+    "subsidies": ["s001", "s003", "s005", "s016"],
+    "message": "移住支援金（東京23区）・定住奨励金・やまぐち若者定住応援事業補助金・住宅取得支援事業補助金の4つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金・定住奨励金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
   "result_s002_s003": {
     "result": true,
     "subsidies": ["s002", "s003"],
     "message": "やまぐち創生テレワーク移住支援事業補助金と定住奨励金の両方に該当する可能性があります。それぞれ条件・申請窓口が異なりますので、詳細はLiveHUBしものせきにご確認ください。"
+  },
+  "result_s002_s015": {
+    "result": true,
+    "subsidies": ["s002", "s015"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金に該当する可能性があります。あわせて下関暮らしサポート補助金（家賃補助）も対象になり得ますが、<span style=\"color:#c00;font-weight:bold;\">【令和8年度の新規申請は受付終了】</span>しています。令和9年度以降の再開状況はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s002_s003_s015": {
+    "result": true,
+    "subsidies": ["s002", "s003", "s015"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金・定住奨励金の両方に該当する可能性があります。あわせて下関暮らしサポート補助金（家賃補助）も対象になり得ますが、<span style=\"color:#c00;font-weight:bold;\">【令和8年度の新規申請は受付終了】</span>しています。令和9年度以降の再開状況やそれぞれの詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s002_s016": {
+    "result": true,
+    "subsidies": ["s002", "s016"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金と住宅取得支援事業補助金の両方に該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s002_s005_s016": {
+    "result": true,
+    "subsidies": ["s002", "s005", "s016"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金・やまぐち若者定住応援事業補助金・住宅取得支援事業補助金の3つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s002_s003_s016": {
+    "result": true,
+    "subsidies": ["s002", "s003", "s016"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金・定住奨励金・住宅取得支援事業補助金の3つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金・定住奨励金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
+  },
+  "result_s002_s003_s005_s016": {
+    "result": true,
+    "subsidies": ["s002", "s003", "s005", "s016"],
+    "message": "下関市やまぐち創生テレワーク移住支援事業補助金・定住奨励金・やまぐち若者定住応援事業補助金・住宅取得支援事業補助金の4つに該当する可能性があります。<span style=\"color:#c00;font-weight:bold;\">【重要】住宅取得支援は、住宅の建築・購入の契約を締結する前に申請し、交付決定を受ける必要があります。</span>契約後の申請は対象外となります。必ず契約前に住宅政策課（083-231-1941）にご相談ください。移住支援金・定住奨励金の詳細はLiveHUBしものせき（0120-540-201）にご確認ください。"
   },
   "result_s003_s004": {
     "result": true,
