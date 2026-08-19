@@ -604,6 +604,9 @@ async function loadData() {
 // ── DOM helpers ───────────────────────────────────────────
 const chat = document.getElementById('chat');
 
+// 本格相談予約フォームのURL（氏名・住所・電話番号・メールアドレスを入力する予約フォーム）
+const RESERVATION_FORM_URL = 'https://shimonoseki.works-go.com/form/f635312/';
+
 // 結果表示のレンダリング中は、途中のバブル追加による最下部スクロールを抑止する。
 // （最後に結果の先頭へ一度だけスクロールするため）
 let suppressScrollBottom = false;
@@ -801,6 +804,70 @@ function addResultCard(node) {
   return wrap;
 }
 
+// 結果カード表示後に「解決したか／もっと相談したいか」を尋ね、
+// 「もっと相談したい」を選んだ場合だけ予約フォームへ誘導する。
+// 46件ある result_* ノードすべてに同じ分岐をflow.json側で複製すると
+// 保守が困難になるため、レンダリング層でノード共通の処理として持たせる。
+function addFollowUpPrompt(nodeId, node) {
+  const msgWrap = document.createElement('div');
+  msgWrap.className = 'bubble-wrap bot';
+  const msgBubble = document.createElement('div');
+  msgBubble.className = 'bubble bot';
+  msgBubble.textContent = 'この案内でご不明な点は解決しましたか？';
+  msgWrap.appendChild(withAvatar(msgBubble));
+  chat.appendChild(msgWrap);
+  scrollBottom();
+
+  const choicesWrap = addChoices(
+    [
+      { label: 'はい、解決しました' },
+      { label: 'いいえ、もっと詳しく相談したい' },
+    ],
+    (choice) => {
+      const wantsConsult = choice.label.startsWith('いいえ');
+      track('result_followup', {
+        node_id: nodeId,
+        answer: wantsConsult ? 'need_consult' : 'resolved',
+        subsidy_ids: node.subsidies ? node.subsidies.join(',') : 'none',
+      });
+      choicesWrap.remove();
+
+      const userWrap = document.createElement('div');
+      userWrap.className = 'bubble-wrap user';
+      const userBubble = document.createElement('div');
+      userBubble.className = 'bubble user';
+      userBubble.textContent = choice.label;
+      userWrap.appendChild(userBubble);
+      chat.appendChild(userWrap);
+
+      const replyBubble = document.createElement('div');
+      replyBubble.className = 'bubble bot';
+      const replyWrap = document.createElement('div');
+      replyWrap.className = 'bubble-wrap bot';
+
+      if (wantsConsult) {
+        replyBubble.innerHTML = 'より詳しいご相談は、担当窓口による本格相談をご予約ください。<br>氏名・住所・電話番号・メールアドレスをご入力いただくフォームから、簡単にお申し込みいただけます。';
+        replyWrap.appendChild(withAvatar(replyBubble));
+        chat.appendChild(replyWrap);
+
+        const ctaWrap = document.createElement('div');
+        ctaWrap.className = 'bubble-wrap bot';
+        const card = document.createElement('div');
+        card.className = 'result-card';
+        card.innerHTML = `<h3>📅 本格相談の予約</h3><p>下のボタンから予約フォームへ進んでください。</p><a class="url-link" href="${RESERVATION_FORM_URL}" target="_blank" rel="noopener">▶ 相談予約フォームへ進む</a>`;
+        ctaWrap.appendChild(card);
+        chat.appendChild(ctaWrap);
+      } else {
+        replyBubble.textContent = 'よかったです！またのご利用をお待ちしております。';
+        replyWrap.appendChild(withAvatar(replyBubble));
+        chat.appendChild(replyWrap);
+      }
+
+      scrollBottom();
+    }
+  );
+}
+
 // ── フロー制御（履歴管理） ─────────────────────────────────
 // path: たどってきたステップの配列。各要素 { nodeId, choice }
 //   choice は選択済みなら {label, next}、現在の質問なら null
@@ -908,6 +975,7 @@ function render() {
         result_type: node.result ? 'match' : 'no_match'
       });
       resultWrap = addResultCard(node);
+      addFollowUpPrompt(step.nodeId, node);
       break;
     }
 
