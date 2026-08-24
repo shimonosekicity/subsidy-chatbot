@@ -237,6 +237,8 @@ body{top:0 !important;position:relative !important;}
 .profile-text-input:focus{outline:none;border-color:var(--blue);}
 .profile-consent{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:.76rem;color:var(--ink-soft);line-height:1.6;}
 .profile-consent input{margin-top:2px;flex-shrink:0;}
+.contact-prefill-link{display:flex;margin-top:12px;}
+.contact-prefill-link.hidden{display:none;}
 
 /* ── フッター ── */
 /* 背景の波と重なっても読めるよう、フッターの文字は少し濃くする（コントラスト比5.0:1） */
@@ -533,6 +535,12 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
         <input type="checkbox" id="contactConsent">
         <span>上記の内容を、LiveHUBしものせき（移住定住トータルサポートセンター）での相談対応のために利用することに同意します。</span>
       </label>
+      <!-- 氏名・住所・電話・メールがすべて入力されたときだけ表示する。
+           予約フォーム側の仕様上、住所・電話・メールはURLパラメータで事前入力できるが、
+           氏名欄は姓/名に分割された表示入力欄のため事前入力が反映されない（要・手動入力）。 -->
+      <a id="contactPrefillLink" class="feedback-link contact-prefill-link hidden" href="#" target="_blank" rel="noopener">
+        📅 入力内容を反映した予約フォームへ進む
+      </a>
     </div>
 
     <div class="profile-actions">
@@ -1202,6 +1210,34 @@ function submitContactInfoIfConsented() {
     // 送信失敗時もチャット利用は継続させる（ユーザー体験をブロックしない）
   });
 }
+
+// 氏名・住所・電話・メールが全項目入力されたときだけ、予約フォームへのリンクを表示する。
+// リンク先には住所・電話・メールをURLパラメータとして付与し、予約フォーム側で再入力の手間を減らす。
+// 氏名は予約フォーム側が姓/名に分割された入力欄のためURLパラメータでは反映されず、対象外。
+const CONTACT_FIELD_IDS = ['contactName', 'contactAddress', 'contactPhone', 'contactEmail'];
+
+function updateContactPrefillLink() {
+  const name = document.getElementById('contactName').value.trim();
+  const address = document.getElementById('contactAddress').value.trim();
+  const phone = document.getElementById('contactPhone').value.trim();
+  const email = document.getElementById('contactEmail').value.trim();
+  const link = document.getElementById('contactPrefillLink');
+
+  const allFilled = name && address && phone && email;
+  link.classList.toggle('hidden', !allFilled);
+  if (!allFilled) return;
+
+  const params = new URLSearchParams({
+    'add01-ad': address,
+    'number01': phone,
+    'email01': email
+  });
+  link.href = `${RESERVATION_FORM_URL}?${params.toString()}`;
+}
+
+CONTACT_FIELD_IDS.forEach(id => {
+  document.getElementById(id).addEventListener('input', updateContactPrefillLink);
+});
 
 document.getElementById('profileSkipBtn').addEventListener('click', () => {
   track('profile_survey_skip');
