@@ -191,6 +191,7 @@ body{top:0 !important;position:relative !important;}
 .nav-btn.restart{border-color:#9aa7b3;color:var(--ink-soft);}
 .nav-btn.restart:hover:not(:disabled){background:#6b7783;border-color:#6b7783;color:#fff;}
 .nav-btn:disabled{opacity:.4;cursor:default;}
+.toolbar-links{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
 .feedback-link{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;color:var(--ink-soft);text-decoration:none;border-bottom:1px solid #b9c6d3;padding-bottom:1px;transition:color .15s,border-color .15s;}
 .feedback-link:hover{color:var(--blue);border-color:var(--blue);}
 .feedback-link:focus-visible{outline:2px solid var(--blue);outline-offset:2px;}
@@ -545,15 +546,35 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     <button id="backBtn" class="nav-btn" type="button">◀ 前の質問に戻る</button>
     <button id="restartBtn" class="nav-btn restart" type="button">🔄 最初に戻る</button>
   </div>
-  <!-- ▼ フィードバックURL：下の href を実際のフォームURLに変更してください ▼ -->
-  <a id="feedbackLink"
-     class="feedback-link"
-     href="https://docs.google.com/forms/d/e/1FAIpQLSeDxUHGEWL_JT_SRQQNxYmqpW2zdjSXSY3W6t5-vSb0E1m9SA/viewform"
-     target="_blank"
-     rel="noopener">
-    📝 ご意見、ご感想はこちらから
-  </a>
-  <!-- ▲ フィードバックURL ここまで ▲ -->
+  <div class="toolbar-links">
+    <!-- ▼ フィードバックURL：下の href を実際のフォームURLに変更してください ▼ -->
+    <a id="feedbackLink"
+       class="feedback-link"
+       href="https://docs.google.com/forms/d/e/1FAIpQLSeDxUHGEWL_JT_SRQQNxYmqpW2zdjSXSY3W6t5-vSb0E1m9SA/viewform"
+       target="_blank"
+       rel="noopener">
+      📝 ご意見、ご感想はこちらから
+    </a>
+    <!-- ▲ フィードバックURL ここまで ▲ -->
+
+    <!-- LiveHUBしものせき（Googleマップ上の情報・営業時間はGoogleマップ側の表示に準拠） -->
+    <a id="livehubLink"
+       class="feedback-link"
+       href="https://www.google.com/maps/search/?api=1&query=%E4%B8%8B%E9%96%A2%E5%B8%82%E8%B1%8A%E5%89%8D%E7%94%B0%E7%94%BA2%E4%B8%81%E7%9B%AE3-13%20Tallor%20house"
+       target="_blank"
+       rel="noopener">
+      📍 LiveHUBしものせきのご案内
+    </a>
+
+    <!-- 本格相談の予約フォーム（RESERVATION_FORM_URLと同一のリンク先） -->
+    <a id="reservationLinkFooter"
+       class="feedback-link"
+       href="https://shimonoseki.works-go.com/form/f635312/"
+       target="_blank"
+       rel="noopener">
+      📅 相談の予約はこちら
+    </a>
+  </div>
 </div>
 
 <script>
