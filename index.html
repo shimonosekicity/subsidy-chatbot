@@ -230,6 +230,13 @@ body{top:0 !important;position:relative !important;}
 .profile-dropdown-list li:hover,.profile-dropdown-list li.active{background:var(--bg);color:var(--navy);}
 .profile-actions{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
 .profile-skip-btn{background:none;border:none;color:var(--ink-soft);font-size:.82rem;text-decoration:underline;cursor:pointer;font-family:var(--font);padding:4px;align-self:center;}
+.profile-contact-box{border:1.5px solid var(--sky);background:#f3f9fd;border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+.profile-contact-lead{font-size:.78rem;color:var(--ink-soft);line-height:1.6;margin-bottom:12px;}
+.profile-text-input{width:100%;box-sizing:border-box;border:1.5px solid var(--line-strong);border-radius:8px;padding:9px 12px;font-size:.86rem;font-family:var(--font);color:var(--ink);margin-bottom:10px;}
+.profile-text-input:last-of-type{margin-bottom:0;}
+.profile-text-input:focus{outline:none;border-color:var(--blue);}
+.profile-consent{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:.76rem;color:var(--ink-soft);line-height:1.6;}
+.profile-consent input{margin-top:2px;flex-shrink:0;}
 
 /* ── フッター ── */
 /* 背景の波と重なっても読めるよう、フッターの文字は少し濃くする（コントラスト比5.0:1） */
@@ -515,6 +522,19 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       </div>
     </div>
 
+    <div class="profile-contact-box">
+      <div class="profile-label">ご連絡先<span class="profile-label-note">（任意・本格的なご相談をご希望の方のみ）</span></div>
+      <p class="profile-contact-lead">LiveHUBしものせきでの本格的なご相談をご希望の場合、下記にご記入いただくとスムーズにご案内できます。ご記入内容は移住相談対応の目的にのみ利用し、Googleアナリティクス等の解析ツールには送信しません。</p>
+      <input type="text" class="profile-text-input" id="contactName" placeholder="氏名" autocomplete="off">
+      <input type="text" class="profile-text-input" id="contactAddress" placeholder="住所" autocomplete="off">
+      <input type="tel" class="profile-text-input" id="contactPhone" placeholder="電話番号" autocomplete="off">
+      <input type="email" class="profile-text-input" id="contactEmail" placeholder="メールアドレス" autocomplete="off">
+      <label class="profile-consent">
+        <input type="checkbox" id="contactConsent">
+        <span>上記の内容を、LiveHUBしものせき（移住定住トータルサポートセンター）での相談対応のために利用することに同意します。</span>
+      </label>
+    </div>
+
     <div class="profile-actions">
       <button class="modal-agree-btn" id="profileSubmitBtn">回答して始める</button>
       <button type="button" class="profile-skip-btn" id="profileSkipBtn">スキップする</button>
@@ -627,6 +647,11 @@ const chat = document.getElementById('chat');
 
 // 本格相談予約フォームのURL（氏名・住所・電話番号・メールアドレスを入力する予約フォーム）
 const RESERVATION_FORM_URL = 'https://shimonoseki.works-go.com/form/f635312/';
+
+// 事前アンケートの連絡先（氏名・住所・電話・メール）送信先。
+// GA4とは完全に別経路のGoogle Apps Script Webアプリ（スプレッドシート書き込み用）。
+// デプロイ後に実際のURLへ差し替えてください。
+const CONTACT_INTAKE_URL = 'https://script.google.com/macros/s/AKfycbzbHcrE1G9x7otGx5HcKEOLBXhyztx03EUN1CgbRgM8tn4-V1K7mYTgOEPQv4AzKz9L/exec';
 
 // 結果表示のレンダリング中は、途中のバブル追加による最下部スクロールを抑止する。
 // （最後に結果の先頭へ一度だけスクロールするため）
@@ -1149,9 +1174,34 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
     params.tokyo_ward = getSelectedChip('ward') || 'unanswered';
   }
   track('profile_survey', params);
+  submitContactInfoIfConsented();
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
 });
+
+// 氏名・住所・電話・メールは、同意チェックがあり、かつ最低1項目は入力されている場合のみ、
+// GA4とは別経路（GAS Webアプリ）に送信する。個人情報をtrack()経由でGA4に送らないこと。
+function submitContactInfoIfConsented() {
+  const consent = document.getElementById('contactConsent').checked;
+  if (!consent) return;
+
+  const contact = {
+    name: document.getElementById('contactName').value.trim(),
+    address: document.getElementById('contactAddress').value.trim(),
+    phone: document.getElementById('contactPhone').value.trim(),
+    email: document.getElementById('contactEmail').value.trim()
+  };
+  if (!contact.name && !contact.address && !contact.phone && !contact.email) return;
+
+  fetch(CONTACT_INTAKE_URL, {
+    method: 'POST',
+    // text/plainにすることでCORSプリフライトを避ける（GAS Webアプリの制約）
+    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+    body: JSON.stringify(contact)
+  }).catch(() => {
+    // 送信失敗時もチャット利用は継続させる（ユーザー体験をブロックしない）
+  });
+}
 
 document.getElementById('profileSkipBtn').addEventListener('click', () => {
   track('profile_survey_skip');
