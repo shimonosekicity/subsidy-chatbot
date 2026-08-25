@@ -231,6 +231,7 @@ body{top:0 !important;position:relative !important;}
 .profile-actions{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
 .profile-skip-btn{background:none;border:none;color:var(--ink-soft);font-size:.82rem;text-decoration:underline;cursor:pointer;font-family:var(--font);padding:4px;align-self:center;}
 .profile-contact-box{border:1.5px solid var(--sky);background:#f3f9fd;border-radius:12px;padding:14px 16px;margin-bottom:18px;}
+.profile-contact-box.hidden{display:none;}
 .profile-contact-lead{font-size:.78rem;color:var(--ink-soft);line-height:1.6;margin-bottom:12px;}
 .profile-text-input{width:100%;box-sizing:border-box;border:1.5px solid var(--line-strong);border-radius:8px;padding:9px 12px;font-size:.86rem;font-family:var(--font);color:var(--ink);margin-bottom:10px;}
 .profile-text-input:last-of-type{margin-bottom:0;}
@@ -524,7 +525,14 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       </div>
     </div>
 
-    <div class="profile-contact-box">
+    <div class="profile-field">
+      <label class="profile-consent">
+        <input type="checkbox" id="wantsConsultToggle">
+        <span>LiveHUBしものせきの窓口に相談を希望する</span>
+      </label>
+    </div>
+
+    <div class="profile-contact-box hidden" id="contactBox">
       <div class="profile-label">ご連絡先<span class="profile-label-note">（任意・本格的なご相談をご希望の方のみ）</span></div>
       <p class="profile-contact-lead">LiveHUBしものせきでの本格的なご相談をご希望の場合、下記にご記入ください。ご入力いただきました内容につきましては、LiveHUBしものせきでの相談対応の目的にのみ利用いたします。ご本人の同意なく第三者へ提供することはございません。</p>
       <input type="text" class="profile-text-input" id="contactName" placeholder="氏名" autocomplete="off">
@@ -1237,6 +1245,11 @@ function updateContactPrefillLink() {
 
 CONTACT_FIELD_IDS.forEach(id => {
   document.getElementById(id).addEventListener('input', updateContactPrefillLink);
+});
+
+// 「窓口・アドバイザーと話したい」にチェックが入ったときだけ、ご連絡先欄を表示する
+document.getElementById('wantsConsultToggle').addEventListener('change', (e) => {
+  document.getElementById('contactBox').classList.toggle('hidden', !e.target.checked);
 });
 
 document.getElementById('profileSkipBtn').addEventListener('click', () => {
