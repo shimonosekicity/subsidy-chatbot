@@ -553,7 +553,6 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
 
     <div class="profile-actions">
       <button class="modal-agree-btn" id="profileSubmitBtn">回答して始める</button>
-      <button type="button" class="profile-skip-btn" id="profileSkipBtn">スキップする</button>
     </div>
   </div>
 </div>
@@ -1250,12 +1249,6 @@ CONTACT_FIELD_IDS.forEach(id => {
 // 「窓口・アドバイザーと話したい」にチェックが入ったときだけ、ご連絡先欄を表示する
 document.getElementById('wantsConsultToggle').addEventListener('change', (e) => {
   document.getElementById('contactBox').classList.toggle('hidden', !e.target.checked);
-});
-
-document.getElementById('profileSkipBtn').addEventListener('click', () => {
-  track('profile_survey_skip');
-  ssSet(SS_PROFILE, '1');
-  document.getElementById('profileModal').classList.add('hidden');
 });
 
 document.getElementById('header-icon-btn').addEventListener('click', restart);
