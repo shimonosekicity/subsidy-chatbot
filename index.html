@@ -940,6 +940,9 @@ const INTRO = 'こんにちは！下関市の補助金・給付金をご案内�
 const SS_PATH    = 'subsidy_path';
 const SS_MODAL   = 'subsidy_modal_agreed';
 const SS_PROFILE = 'subsidy_profile_done';
+// 結果画面到達時に本フロー回答を追加送信する仕組み用（同意した場合のみ使う）
+const SS_CONTACT_CACHE       = 'subsidy_contact_cache';
+const SS_RESULT_CONTACT_SENT = 'subsidy_result_contact_sent';
 
 // sessionStorageは、他サイトへiframe埋め込みした場合（クロスオリジン）や
 // プライベートブラウズでは、アクセスしただけで例外が発生することがある。
@@ -958,6 +961,37 @@ const INITIAL_NODE_PARAM = new URLSearchParams(window.location.search).get('node
 // 進行状態をsessionStorageに保存（タブ内リロードで復元される）
 function savePath() {
   ssSet(SS_PATH, JSON.stringify(path));
+}
+
+// サスケワークスのCSVと突き合わせたい本フローの質問。
+// 同じ意味の質問が分岐によって複数のノードIDに分かれているため、共通のキーにまとめる。
+const MAIN_FLOW_LINK_NODES = {
+  migration_tokyo_stage: 'migration_stage',
+  migration_metro_stage: 'migration_stage',
+  migration_other_stage: 'migration_stage',
+  migration_tokyo: 'work_style',
+  migration_metro: 'work_style',
+  migration_tokyo_area: 'settle_area',
+  migration_metro_area: 'settle_area',
+  migration_other_purchase: 'settle_area',
+  migration_other_rental: 'settle_area',
+  migration_other: 'housing_type',
+  migration_purchase_rural_current: 'current_residence_detail',
+  migration_rental_rural_current: 'current_residence_detail',
+  migration_preview: 'trial_interest',
+};
+
+// その時点までに path に記録されている本フローの回答のうち、
+// MAIN_FLOW_LINK_NODES に該当するものだけを集める（未回答の質問は含まれない）。
+function getMainFlowAnswers() {
+  const answers = {};
+  path.forEach((step) => {
+    const key = MAIN_FLOW_LINK_NODES[step.nodeId];
+    if (key && step.choice) {
+      answers[key] = step.choice.label;
+    }
+  });
+  return answers;
 }
 
 // 選択肢を選んだとき：現在ステップに選択を記録し、次のノードへ進む
@@ -1035,6 +1069,7 @@ function render() {
         subsidy_ids: node.subsidies ? node.subsidies.join(',') : 'none',
         result_type: node.result ? 'match' : 'no_match'
       });
+      resendContactWithMainFlowIfNeeded();
       resultWrap = addResultCard(node);
       addFollowUpPrompt(step.nodeId, node);
       break;
@@ -1198,6 +1233,10 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
 // GA4とは別経路（GAS Webアプリ）に送信する。個人情報をtrack()経由でGA4に送らないこと。
 // 事前アンケートの回答（chatAnswers）もあわせて送ることで、LiveHUBしものせきの
 // 相談記録側で「同じ人物の回答」として結びつけられるようにする（同意が前提）。
+//
+// この時点ではまだ本フローの質問に入っていないため、本フローの回答（mainFlowAnswers）は
+// 空で送られる。結果画面に到達した時点で、resendContactWithMainFlowIfNeeded() が
+// そのとき点までの本フロー回答を含めてもう一度送信する。
 function submitContactInfoIfConsented(chatAnswers) {
   const consent = document.getElementById('contactConsent').checked;
   if (!consent) return;
@@ -1210,14 +1249,46 @@ function submitContactInfoIfConsented(chatAnswers) {
   };
   if (!contact.name && !contact.address && !contact.phone && !contact.email) return;
 
+  // 結果画面到達時にもう一度送信するため、連絡先をこのブラウザのセッション内にのみ保存しておく
+  // （どこにも送信しない。resendContactWithMainFlowIfNeeded() が再利用するだけ）
+  ssSet(SS_CONTACT_CACHE, JSON.stringify(contact));
+
+  sendContactPayload_(contact, chatAnswers, getMainFlowAnswers());
+}
+
+// 連絡先送信の実処理。事前アンケート時と結果画面到達時の、2箇所から呼ばれうる。
+function sendContactPayload_(contact, chatAnswers, mainFlowAnswers) {
   fetch(CONTACT_INTAKE_URL, {
     method: 'POST',
     // text/plainにすることでCORSプリフライトを避ける（GAS Webアプリの制約）
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify({ contact, chatAnswers })
+    body: JSON.stringify({ contact, chatAnswers, mainFlowAnswers })
   }).catch(() => {
     // 送信失敗時もチャット利用は継続させる（ユーザー体験をブロックしない）
   });
+}
+
+// 結果画面に到達した時点で、事前アンケート時に連絡先の同意・入力があった場合のみ、
+// そのとき点までの本フロー回答（getMainFlowAnswers()）を含めてもう一度送信する。
+// 1セッションにつき1回だけ送る（result_view のたびに重複送信しないようガードする）。
+function resendContactWithMainFlowIfNeeded() {
+  if (ssGet(SS_RESULT_CONTACT_SENT) === '1') return;
+
+  const cached = ssGet(SS_CONTACT_CACHE);
+  if (!cached) return; // 事前アンケートで同意・連絡先入力をしていない場合は何もしない
+
+  const mainFlowAnswers = getMainFlowAnswers();
+  if (Object.keys(mainFlowAnswers).length === 0) return; // 対象の質問に1つも回答していなければ送らない
+
+  let contact;
+  try {
+    contact = JSON.parse(cached);
+  } catch (e) {
+    return;
+  }
+
+  sendContactPayload_(contact, null, mainFlowAnswers);
+  ssSet(SS_RESULT_CONTACT_SENT, '1');
 }
 
 // 氏名・住所・電話・メールが全項目入力されたときだけ、予約フォームへのリンクを表示する。
