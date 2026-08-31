@@ -534,14 +534,14 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
 
     <div class="profile-contact-box hidden" id="contactBox">
       <div class="profile-label">ご連絡先<span class="profile-label-note">（任意・本格的なご相談をご希望の方のみ）</span></div>
-      <p class="profile-contact-lead">LiveHUBしものせきでの本格的なご相談をご希望の場合、下記にご記入ください。ご入力いただきました内容につきましては、LiveHUBしものせきでの相談対応の目的にのみ利用いたします。ご本人の同意なく第三者へ提供することはございません。</p>
+      <p class="profile-contact-lead">LiveHUBしものせきでの本格的なご相談をご希望の場合、下記にご記入ください。ご入力いただきました連絡先と、このアンケートでの回答内容をあわせて、LiveHUBしものせきでの相談対応の目的にのみ利用いたします。ご本人の同意なく第三者へ提供することはございません。</p>
       <input type="text" class="profile-text-input" id="contactName" placeholder="氏名" autocomplete="off">
       <input type="text" class="profile-text-input" id="contactAddress" placeholder="住所" autocomplete="off">
       <input type="tel" class="profile-text-input" id="contactPhone" placeholder="電話番号" autocomplete="off">
       <input type="email" class="profile-text-input" id="contactEmail" placeholder="メールアドレス" autocomplete="off">
       <label class="profile-consent">
         <input type="checkbox" id="contactConsent">
-        <span>上記の内容を、LiveHUBしものせき（移住定住トータルサポートセンター）での相談対応のために利用することに同意します。</span>
+        <span>上記のご連絡先と、このアンケートでの回答内容を、LiveHUBしものせき（移住定住トータルサポートセンター）での相談対応のために利用することに同意します。</span>
       </label>
       <!-- 氏名・住所・電話・メールがすべて入力されたときだけ表示する。
            予約フォーム側の仕様上、住所・電話・メールはURLパラメータで事前入力できるが、
@@ -1189,14 +1189,16 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
     params.tokyo_ward = getSelectedChip('ward') || 'unanswered';
   }
   track('profile_survey', params);
-  submitContactInfoIfConsented();
+  submitContactInfoIfConsented(params);
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
 });
 
 // 氏名・住所・電話・メールは、同意チェックがあり、かつ最低1項目は入力されている場合のみ、
 // GA4とは別経路（GAS Webアプリ）に送信する。個人情報をtrack()経由でGA4に送らないこと。
-function submitContactInfoIfConsented() {
+// 事前アンケートの回答（chatAnswers）もあわせて送ることで、LiveHUBしものせきの
+// 相談記録側で「同じ人物の回答」として結びつけられるようにする（同意が前提）。
+function submitContactInfoIfConsented(chatAnswers) {
   const consent = document.getElementById('contactConsent').checked;
   if (!consent) return;
 
@@ -1212,7 +1214,7 @@ function submitContactInfoIfConsented() {
     method: 'POST',
     // text/plainにすることでCORSプリフライトを避ける（GAS Webアプリの制約）
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-    body: JSON.stringify(contact)
+    body: JSON.stringify({ contact, chatAnswers })
   }).catch(() => {
     // 送信失敗時もチャット利用は継続させる（ユーザー体験をブロックしない）
   });
