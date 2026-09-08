@@ -506,6 +506,16 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     </div>
 
     <div class="profile-field">
+      <div class="profile-label">UIJターンの状況</div>
+      <div class="chip-group" data-field="uij_turn">
+        <button type="button" class="chip-btn" data-value="Uターン（出身地に戻る）">Uターン（出身地に戻る）</button>
+        <button type="button" class="chip-btn" data-value="Iターン（縁のない地域へ）">Iターン（縁のない地域へ）</button>
+        <button type="button" class="chip-btn" data-value="Jターン（出身地の近くへ）">Jターン（出身地の近くへ）</button>
+        <button type="button" class="chip-btn" data-value="わからない・該当なし">わからない・該当なし</button>
+      </div>
+    </div>
+
+    <div class="profile-field">
       <div class="profile-label">移住希望エリア</div>
       <div class="chip-group" data-field="area">
         <button type="button" class="chip-btn" data-value="豊浦町">豊浦町</button>
@@ -1217,6 +1227,7 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
     age_group: getSelectedChip('age') || 'unanswered',
     current_residence: selectedResidence || 'unanswered',
     household_size: getSelectedChip('household') || 'unanswered',
+    uij_turn: getSelectedChip('uij_turn') || 'unanswered',
     target_area: getSelectedChip('area') || 'unanswered',
     migration_reason: getSelectedChips('reason').join('、') || 'unanswered'
   };
