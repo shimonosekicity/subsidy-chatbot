@@ -238,6 +238,9 @@ body{top:0 !important;position:relative !important;}
 .profile-text-input:focus{outline:none;border-color:var(--blue);}
 .profile-consent{display:flex;align-items:flex-start;gap:8px;margin-top:12px;font-size:.76rem;color:var(--ink-soft);line-height:1.6;}
 .profile-consent input{margin-top:2px;flex-shrink:0;}
+.consult-toggle-field{margin-top:4px;margin-bottom:2px;text-align:center;}
+.consult-toggle-link{background:none;border:none;padding:0;font-size:.62rem;color:#9aa7b3;text-decoration:underline;cursor:pointer;font-family:var(--font);}
+.consult-toggle-link:hover{color:var(--ink-soft);}
 .contact-prefill-link{display:flex;margin-top:12px;}
 .contact-prefill-link.hidden{display:none;}
 
@@ -525,11 +528,14 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       </div>
     </div>
 
-    <div class="profile-field">
-      <label class="profile-consent">
-        <input type="checkbox" id="wantsConsultToggle">
-        <span>LiveHUBしものせきの窓口に相談を希望する</span>
-      </label>
+    <div class="profile-actions">
+      <button class="modal-agree-btn" id="profileSubmitBtn">回答して始める</button>
+    </div>
+
+    <!-- あえて目立たせない配置：まずはBot内での解決を基本とし、
+         本格的な相談を希望する方だけが下にスクロールして気づく想定 -->
+    <div class="profile-field consult-toggle-field">
+      <button type="button" class="consult-toggle-link" id="wantsConsultToggle">LiveHUBしものせきの窓口に相談を希望する</button>
     </div>
 
     <div class="profile-contact-box hidden" id="contactBox">
@@ -549,10 +555,6 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       <a id="contactPrefillLink" class="feedback-link contact-prefill-link hidden" href="#" target="_blank" rel="noopener">
         📅 予約フォームへ進む
       </a>
-    </div>
-
-    <div class="profile-actions">
-      <button class="modal-agree-btn" id="profileSubmitBtn">回答して始める</button>
     </div>
   </div>
 </div>
@@ -1319,9 +1321,9 @@ CONTACT_FIELD_IDS.forEach(id => {
   document.getElementById(id).addEventListener('input', updateContactPrefillLink);
 });
 
-// 「窓口・アドバイザーと話したい」にチェックが入ったときだけ、ご連絡先欄を表示する
-document.getElementById('wantsConsultToggle').addEventListener('change', (e) => {
-  document.getElementById('contactBox').classList.toggle('hidden', !e.target.checked);
+// クリックするたびに、ご連絡先欄の表示・非表示を切り替える
+document.getElementById('wantsConsultToggle').addEventListener('click', () => {
+  document.getElementById('contactBox').classList.toggle('hidden');
 });
 
 document.getElementById('header-icon-btn').addEventListener('click', restart);
