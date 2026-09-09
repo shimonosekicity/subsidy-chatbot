@@ -1240,7 +1240,29 @@ document.getElementById('profileSubmitBtn').addEventListener('click', () => {
   submitContactInfoIfConsented(params);
   ssSet(SS_PROFILE, '1');
   document.getElementById('profileModal').classList.add('hidden');
+  redirectToReservationIfReady_();
 });
+
+// 連絡先入力＋同意チェックまで完了している場合だけ、
+// 「まだ相談予約は完了していない」ことを明示したうえで、予約フォームを別タブで自動的に開く。
+// window.open()はクリックイベント内で同期的に呼ぶ必要がある（非同期処理を挟むとポップアップブロックされるため）。
+function redirectToReservationIfReady_() {
+  const link = document.getElementById('contactPrefillLink');
+  const consentGiven = document.getElementById('contactConsent').checked;
+  const linkReady = !link.classList.contains('hidden');
+  if (!consentGiven || !linkReady) return;
+
+  const msgWrap = document.createElement('div');
+  msgWrap.className = 'bubble-wrap bot';
+  const msgBubble = document.createElement('div');
+  msgBubble.className = 'bubble bot';
+  msgBubble.innerHTML = '⚠️ <strong>ご相談の予約はまだ完了していません。</strong><br>別タブで開いた予約フォームに必要事項をご入力のうえ、送信してください。';
+  msgWrap.appendChild(withAvatar(msgBubble));
+  chat.appendChild(msgWrap);
+  scrollBottom();
+
+  window.open(link.href, '_blank', 'noopener');
+}
 
 // 氏名・住所・電話・メールは、同意チェックがあり、かつ最低1項目は入力されている場合のみ、
 // GA4とは別経路（GAS Webアプリ）に送信する。個人情報をtrack()経由でGA4に送らないこと。
