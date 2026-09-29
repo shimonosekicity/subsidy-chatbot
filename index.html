@@ -636,10 +636,37 @@ const EMBED_ORIGIN = (function () {
   try { return document.referrer ? new URL(document.referrer).origin : ''; } catch (e) { return ''; }
 })();
 
+// ★追加: 匿名の行動分析用ID（個人情報は一切含まない）。
+// ブラウザのlocalStorageに一度だけUUIDを発行して保存し、同じブラウザからの
+// 複数回の訪問・行動をGA4上で束ねられるようにする（例：同じ人が何度も戻ってきて
+// いるか、離脱しやすい分野はどこか、といった匿名の行動傾向分析のみが目的）。
+// 【重要】このIDは氏名・住所・電話番号等を受け取るCode.gs（連絡先送信）へは
+// 一切送信しない。GA4イベントのカスタムパラメータとしてのみ使う、GA4専用の値。
+const ANON_UID_STORAGE_KEY = 'subsidy_chatbot_anon_uid';
+const ANON_UID = (function () {
+  try {
+    let id = localStorage.getItem(ANON_UID_STORAGE_KEY);
+    if (!id) {
+      id = (typeof crypto !== 'undefined' && crypto.randomUUID)
+        ? crypto.randomUUID()
+        : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+            const r = Math.random() * 16 | 0;
+            const v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+          });
+      localStorage.setItem(ANON_UID_STORAGE_KEY, id);
+    }
+    return id;
+  } catch (e) {
+    return null; // localStorageが使えない環境（プライベートモード等）では匿名IDなしで動作する
+  }
+})();
+
 function track(name, params) {
   const data = Object.assign({
     embedded: IS_EMBEDDED ? 'yes' : 'no',
-    embed_host: EMBED_ORIGIN ? EMBED_ORIGIN.replace(/^https?:\/\//, '') : '(none)'
+    embed_host: EMBED_ORIGIN ? EMBED_ORIGIN.replace(/^https?:\/\//, '') : '(none)',
+    anon_uid: ANON_UID || '(none)'
   }, params || {});
 
   if (typeof gtag === 'function') gtag('event', name, data);
