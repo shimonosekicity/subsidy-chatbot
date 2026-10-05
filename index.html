@@ -1340,6 +1340,12 @@ function submitContactInfoIfConsented(chatAnswers) {
   ssSet(SS_CONTACT_CACHE, JSON.stringify(contact));
 
   sendContactPayload_(contact, chatAnswers, getMainFlowAnswers());
+
+  // GA4へは「連絡先を提出した」という事実だけを記録する（件数分析用）。
+  // 【個人情報は含めない】氏名・住所・電話・メール・入力内容・入力項目数・アンケート回答は一切渡さない。
+  // 【匿名IDは連絡先経路へ渡さない】anon_uidはtrack()がGA4側にのみ付与する。上のsendContactPayload_（Code.gs宛）には含めない。
+  // 送信（fetch）の成否には依存しない。
+  track('contact_submit', { event_category: 'engagement', event_label: 'contact_consented' });
 }
 
 // 連絡先送信の実処理。事前アンケート時と結果画面到達時の、2箇所から呼ばれうる。
