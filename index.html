@@ -351,6 +351,30 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     }, 'google_translate_element');
   }
 
+  // ── 日本語に戻す（更新ボタン不要） ──────────────────────
+  // 1) Google翻訳の「原文を表示」ボタンを押す 2) 効かなければ選択を空に戻す
+  // 3) それでも翻訳状態が残るときだけ、最後の手段として再読み込みする
+  function isTranslated() {
+    var c = document.documentElement.classList;
+    return c.contains('translated-ltr') || c.contains('translated-rtl');
+  }
+  function restoreJapanese() {
+    try {
+      var frames = document.querySelectorAll('iframe.skiptranslate, iframe.goog-te-banner-frame, iframe[class*="VIpgJd"]');
+      for (var i = 0; i < frames.length; i++) {
+        var d = frames[i].contentDocument;
+        var btn = d && d.querySelector('[id$=".restore"]');
+        if (btn) { btn.click(); break; }
+      }
+    } catch (e) {}
+    var combo = document.querySelector('.goog-te-combo');
+    if (combo) { combo.value = ''; combo.dispatchEvent(new Event('change')); }
+    setTimeout(function () {
+      if (isTranslated()) { location.reload(); }
+      else { document.documentElement.lang = 'ja'; hideBanner(); }
+    }, 1500);
+  }
+
   // ── 言語切替 ─────────────────────────────────────────
   document.getElementById('lang-select').addEventListener('change', function () {
     var lang = this.value;
@@ -362,8 +386,7 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
       document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.' + location.hostname;
       currentLang = 'ja';
       buildSelect();
-      var combo = document.querySelector('.goog-te-combo');
-      if (combo) { combo.value = ''; combo.dispatchEvent(new Event('change')); }
+      restoreJapanese();
       return;
     }
 
