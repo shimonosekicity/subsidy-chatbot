@@ -74,6 +74,8 @@ header h1{font-size:1.06rem;line-height:1.35;flex:1;font-weight:700;letter-spaci
 #lang-select:focus-visible{outline:2px solid #fff;outline-offset:2px;}
 #lang-select option{color:#222;background:#fff;}
 #google_translate_element{display:none;}
+body.lang-veil #chat,body.lang-veil .toolbar,body.lang-veil header h1{opacity:0;}
+#chat,.toolbar,header h1{transition:opacity .18s;}
 .goog-te-banner-frame,.goog-te-banner-frame.skiptranslate{display:none !important;}
 body{top:0 !important;position:relative !important;}
 .skiptranslate>iframe{display:none !important;}
@@ -375,6 +377,24 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     }, 1500);
   }
 
+  // ── 外国語から別の外国語へ切り替えるとき、途中の日本語表示を見せない ──
+  // 翻訳が落ち着く（0.5秒、変化がない）まで、画面を一時的に透明にする。最短0.8秒、最長4秒
+  var veilTimer = null;
+  function veilUntilSettled() {
+    var body = document.body, start = Date.now(), last = Date.now();
+    body.classList.add('lang-veil');
+    var mo = new MutationObserver(function () { last = Date.now(); });
+    mo.observe(body, { childList: true, subtree: true, characterData: true });
+    clearInterval(veilTimer);
+    veilTimer = setInterval(function () {
+      var now = Date.now();
+      if ((now - start > 800 && now - last > 500) || now - start > 4000) {
+        clearInterval(veilTimer); mo.disconnect();
+        body.classList.remove('lang-veil');
+      }
+    }, 100);
+  }
+
   // ── 言語切替 ─────────────────────────────────────────
   document.getElementById('lang-select').addEventListener('change', function () {
     var lang = this.value;
@@ -391,6 +411,7 @@ footer{text-align:center;font-size:.75rem;color:#44505b;padding:14px 16px;line-h
     }
 
     // 他言語に切り替え
+    if (currentLang !== 'ja') { veilUntilSettled(); } // 外国語→別の外国語のときだけ
     var trySwitch = function (attempts) {
       var combo = document.querySelector('.goog-te-combo');
       if (combo) {
