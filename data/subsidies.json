@@ -163,10 +163,28 @@
       "name": "下関市結婚新生活支援補助金",
       "summary": "抽選に当選した新婚世帯の、住宅取得・賃借・リフォーム・引越費用の一部を補助します（事前エントリー必須）。",
       "amount": "夫婦ともに婚姻日時点で29歳以下：1夫婦につき最大60万円／夫婦ともに婚姻日時点で39歳以下：1夫婦につき最大30万円",
-      "conditions": "<span class='ch'>【参加できる方】（すべて満たす方）</span><span class='ci'>・<span class='nw'>令和8年4月1日〜令和9年3月31日</span>に婚姻届を提出・受理された夫婦（提出予定を含む）</span><span class='ci'>・夫婦ともに婚姻日時点で<span class='nw'>39歳以下</span></span><span class='ci'>・夫婦の前年の所得（合計所得金額）の合計から、返済した貸与型奨学金の額を引いて<span class='nw'>500万円未満</span></span><span class='ci'>・夫婦ともに下関市に居住（居住予定を含む）</span><span class='ci'>・交付日から<span class='nw'>1年以上</span>、申請した住宅に定住する意思がある</span><span class='ci'>・夫婦のどちらも、過去に結婚新生活支援補助金（他の自治体の同種の制度を含む）の交付を受けていない</span><span class='ci'>・他の公的制度による住宅補助・家賃補助を受けていない</span><span class='ch'>【講座の受講・相談】</span><span class='ci'>・夫婦双方が、令和8年4月1日〜令和9年3月31日の間に、次のいずれかを受講済み（または相談済み）</span><span class='ci2'>－ライフデザインの支援に関する講座の受講</span><span class='ci2'>－プレコンセプションケアに関する講座の受講</span><span class='ci2'>－共家事・共育てに関する講座の受講</span><span class='ci2'>－医療機関等への妊娠又は出産に関する相談</span><span class='cs'>※夫婦それぞれが別の取組でも構いません</span><span class='ch'>【対象になる費用】（令和8年4月1日〜令和9年3月31日に支払ったもの）</span><span class='ci'>・住宅取得費用（建物購入費のみ）</span><span class='ci'>・リフォーム費用（外構・家電を除く）</span><span class='ci'>・賃借費用（家賃・敷金・礼金等）</span><span class='ci'>・引越し費用（業者利用分のみ）</span>",
-      "deadline": "事前エントリー（抽選）の受付期間：令和8年10月26日〜12月22日。当選者のみ、令和9年2月28日までに申請書を市へ提出",
+      "conditions": "<span class='ch'>【主な参加要件】</span><span class='ci'>・<span class='nw'>令和8年4月1日</span>〜<span class='nw'>令和9年3月31日</span>に<span class='nw'>婚姻届</span>を提出・受理された夫婦<span class='nw'>（提出予定を含む）</span></span><span class='ci'>・夫婦ともに婚姻日時点で<span class='nw'>39歳以下</span></span><span class='ci'>・夫婦の前年の所得（合計所得金額）の合計から、返済した貸与型奨学金の額を引いて<span class='nw'>500万円未満</span></span><span class='ci'>・夫婦双方が、<span class='nw'>令和8年4月1日</span>〜<span class='nw'>令和9年3月31日</span>の間に、講座の<span class='nw'>受講</span>または<span class='nw'>相談</span>のいずれかを済ませていること</span><span class='cs'>※このほかにも要件が<span class='nw'>あります</span>。詳しくは<span class='nw'>下関市</span>の公式ページをご<span class='nw'>確認</span>ください。</span>",
+      "deadline": "事前エントリー（抽選）の受付期間：<span class='nw'>令和8年10月26日</span>〜<span class='nw'>12月22日</span>。当選者のみ、<span class='nw'>令和9年2月28日</span>までに申請書を市へ提出",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
-      "url": "https://www.shimonosekicitypromotion.jp/131804.html"
+      "url": "https://www.shimonosekicitypromotion.jp/131804.html",
+      "steps": [
+        {
+          "when": "<span class='nw'>令和8年10月26日</span>〜<span class='nw'>12月22日</span>",
+          "what": "参加要件を確認のうえ、事前エントリー（抽選への申込み）をする。エントリー後、受付完了のメールが届く"
+        },
+        {
+          "when": "エントリー後",
+          "what": "抽選の結果がメールで届く（当選した方には申請書類が送付される）"
+        },
+        {
+          "when": "令和9年2月28日まで",
+          "what": "当選した方のみ、申請書を市へ提出する"
+        },
+        {
+          "when": "申請書の提出後",
+          "what": "補助金が交付される"
+        }
+      ]
     },
     "s011": {
       "name": "出産・子育て応援ギフト（妊婦支援給付金）",
