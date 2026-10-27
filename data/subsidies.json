@@ -162,14 +162,14 @@
     "s010": {
       "name": "下関市結婚新生活支援補助金",
       "summary": "抽選に当選した新婚世帯の、住宅取得・賃借・リフォーム・引越費用の一部を補助します（事前エントリー必須）。",
-      "amount": "夫婦ともに婚姻日時点で29歳以下：1夫婦につき最大60万円／夫婦ともに婚姻日時点で39歳以下：1夫婦につき最大30万円",
-      "conditions": "<span class='ch'>【主な参加要件】</span><span class='ci'>・<span class='nw'>令和8年4月1日</span>〜<span class='nw'>令和9年3月31日</span>に<span class='nw'>婚姻届</span>を提出・受理された夫婦<span class='nw'>（提出予定を含む）</span></span><span class='ci'>・夫婦ともに婚姻日時点で<span class='nw'>39歳以下</span></span><span class='ci'>・夫婦の前年の所得（合計所得金額）の合計から、返済した貸与型奨学金の額を引いて<span class='nw'>500万円未満</span></span><span class='ci'>・夫婦双方が、<span class='nw'>令和8年4月1日</span>〜<span class='nw'>令和9年3月31日</span>の間に、講座の<span class='nw'>受講</span>または<span class='nw'>相談</span>のいずれかを済ませていること</span><span class='cs'>※このほかにも要件が<span class='nw'>あります</span>。詳しくは<span class='nw'>下関市</span>の公式ページをご<span class='nw'>確認</span>ください。</span>",
-      "deadline": "事前エントリー（抽選）の受付期間：<span class='nw'>令和8年10月26日</span>〜<span class='nw'>12月22日</span>。当選者のみ、<span class='nw'>令和9年2月28日</span>までに申請書を市へ提出",
+      "amount": "夫婦ともに婚姻日時点で<span class='nw'>29歳以下</span>：1夫婦につき最大<span class='nw'>60万円</span>／夫婦ともに婚姻日時点で<span class='nw'>39歳以下</span>：1夫婦につき最大<span class='nw'>30万円</span>",
+      "conditions": "<span class='ch'>【主な参加要件】</span><span class='ci'>・令和8年<span class='nw'>4月1日</span>〜令和9年<span class='nw'>3月31日</span>に婚姻届を提出・受理された夫婦（提出予定<span class='nw'>を含む）</span></span><span class='ci'>・夫婦ともに婚姻日時点で<span class='nw'>39歳以下</span></span><span class='ci'>・夫婦の前年の所得（合計所得金額）の合計から、返済した貸与型奨学金の額を引いて<span class='nw'>500万円未満</span></span><span class='ci'>・夫婦双方が、令和8年<span class='nw'>4月1日</span>〜令和9年<span class='nw'>3月31日</span>の間に、講座の受講または相談のいずれかを済ませて<span class='nw'>いること</span></span><span class='cs'>※このほかにも要件があります。詳しくは下関市の公式ページをご確認<span class='nw'>ください。</span></span>",
+      "deadline": "事前エントリー（抽選）の受付期間：令和8年<span class='nw'>10月26日</span>〜<span class='nw'>12月22日</span>。当選者のみ、令和9年<span class='nw'>2月28日</span>までに申請書を市へ提出",
       "contact": "移住定住トータルサポートセンター LiveHUBしものせき TEL: 0120-540-201",
       "url": "https://www.shimonosekicitypromotion.jp/131804.html",
       "steps": [
         {
-          "when": "<span class='nw'>令和8年10月26日</span>〜<span class='nw'>12月22日</span>",
+          "when": "令和8年<span class='nw'>10月26日</span>〜<span class='nw'>12月22日</span>",
           "what": "参加要件を確認のうえ、事前エントリー（抽選への申込み）をする。エントリー後、受付完了のメールが届く"
         },
         {
@@ -177,7 +177,7 @@
           "what": "抽選の結果がメールで届く（当選した方には申請書類が送付される）"
         },
         {
-          "when": "令和9年2月28日まで",
+          "when": "令和9年<span class='nw'>2月28日</span>まで",
           "what": "当選した方のみ、申請書を市へ提出する"
         },
         {
