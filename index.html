@@ -2,20 +2,91 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YQE9DJMGSC"></script>
+  <!-- ホスト移行（GitHub Pages → さくら）。GA4より前に実行する必要があるため、必ず<head>の先頭に置く -->
+  <script>
+    // 旧ホスト(GitHub Pages)で開かれたら、パス・クエリ・ハッシュを保ったまま新URLへ転送する。
+    // 転送する旧ホストでは、gtag.js の読み込みと計測を行わない（旧ホストの page_view が余計に付かない）。
+    // 転送時に、匿名ID(anon_uid)と埋め込み元オリジンだけを _aid / _emb で新ホストへ渡す
+    // （localStorage はオリジンごとのため、渡さないと同じ人が別ユーザーになる／
+    //  転送後は document.referrer が旧URLになり埋め込み元が分からなくなる）。
+    // 新ホストでは、受け取ったら URL から消す（GA4の page_location にも残さない）。
+    var MIGRATE_REDIRECT_ENABLED = true; // false にすると転送しない（切り替えのタイミング調整用）
+    (function () {
+      var OLD_HOST = 'shimonosekicity.github.io';
+      var OLD_BASE_PATH = '/subsidy-chatbot/';
+      var NEW_ORIGIN = 'https://navi.shimonoseki-life.jp';
+      var UID_KEY = 'subsidy_chatbot_anon_uid';
+      var UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      var mig = window.__MIGRATION = { redirecting: false, arrived: false, aid: '', emb: null };
+      try {
+        var host = location.hostname, target = NEW_ORIGIN;
+        var q = new URLSearchParams(location.search);
+        // ローカル検証用：localhost / 127.0.0.1 のときだけ、ホスト名と転送先を差し替えられる
+        if (host === 'localhost' || host === '127.0.0.1') {
+          if (q.get('_testhost')) host = q.get('_testhost');
+          if (/^https?:\/\/[^\/]+$/.test(q.get('_testtarget') || '')) target = q.get('_testtarget');
+        }
+
+        if (MIGRATE_REDIRECT_ENABLED && host === OLD_HOST) {
+          var path = location.pathname;
+          if (path === OLD_BASE_PATH.slice(0, -1)) path = '/';
+          else if (path.indexOf(OLD_BASE_PATH) === 0) path = '/' + path.slice(OLD_BASE_PATH.length);
+          var out = new URLSearchParams();
+          q.forEach(function (v, k) {
+            if (k !== '_aid' && k !== '_emb' && k.indexOf('_test') !== 0) out.append(k, v);
+          });
+          var uid = null;
+          try { uid = localStorage.getItem(UID_KEY); } catch (e) {}
+          if (uid && UUID_RE.test(uid)) out.set('_aid', uid);
+          var emb = '';
+          try { emb = document.referrer ? new URL(document.referrer).origin : ''; } catch (e) {}
+          out.set('_emb', emb); // 空でも付ける（新ホスト側で「移行経由」と判別し、referrerを使わせないため）
+          mig.redirecting = true;
+          location.replace(target + path + '?' + out.toString() + location.hash);
+          return;
+        }
+
+        // 移行経由で来た場合：匿名IDと埋め込み元を受け取り、URLから消す
+        if (q.has('_aid') || q.has('_emb')) {
+          var aid = q.get('_aid');
+          if (aid && UUID_RE.test(aid)) mig.aid = aid;
+          if (q.has('_emb')) {
+            try {
+              var u = new URL(q.get('_emb'));
+              mig.emb = /^https?:$/.test(u.protocol) ? u.origin : '';
+            } catch (e) { mig.emb = ''; }
+          }
+          mig.arrived = true;
+          q.delete('_aid'); q.delete('_emb');
+          var qs = q.toString();
+          history.replaceState(history.state, '', location.pathname + (qs ? '?' + qs : '') + location.hash);
+        }
+      } catch (e) {}
+    })();
+  </script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
+    // Google tag (gtag.js)。転送中の旧ホストでは読み込まない
+    if (!window.__MIGRATION.redirecting) {
+      var gtagScript = document.createElement('script');
+      gtagScript.async = true;
+      gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-YQE9DJMGSC';
+      document.head.appendChild(gtagScript);
+      gtag('js', new Date());
+    }
     // 他サイトへiframe埋め込みされると、ブラウザ（特にiOS Safari）が
     // サードパーティCookieを保存できず、GA4は毎回別ユーザーとして数えてしまう。
     // 親ページが ?cid= で自分のclient_idを渡してくれた場合は、それを使って
     // 同一ユーザーとして計測する。
     (function () {
+      if (window.__MIGRATION.redirecting) return;
       var cid = null;
       try { cid = new URLSearchParams(location.search).get('cid'); } catch (e) {}
-      gtag('config', 'G-YQE9DJMGSC', cid ? { client_id: cid } : {});
+      var cfg = cid ? { client_id: cid } : {};
+      // 移行経由の場合、referrer は旧URLになるため、本来の埋め込み元があればそれを参照元として渡す
+      if (window.__MIGRATION.emb) cfg.page_referrer = window.__MIGRATION.emb + '/';
+      gtag('config', 'G-YQE9DJMGSC', cfg);
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -657,6 +728,8 @@ const IS_EMBEDDED = (function () {
   try { return window.self !== window.top; } catch (e) { return true; }
 })();
 const EMBED_ORIGIN = (function () {
+  // 移行経由(_emb)で来た場合は、旧ホストが取得した埋め込み元を使う（referrerは旧URLになっているため）
+  if (window.__MIGRATION && window.__MIGRATION.emb !== null) return window.__MIGRATION.emb;
   try { return document.referrer ? new URL(document.referrer).origin : ''; } catch (e) { return ''; }
 })();
 
@@ -670,6 +743,10 @@ const ANON_UID_STORAGE_KEY = 'subsidy_chatbot_anon_uid';
 const ANON_UID = (function () {
   try {
     let id = localStorage.getItem(ANON_UID_STORAGE_KEY);
+    if (!id && window.__MIGRATION && window.__MIGRATION.aid) {
+      id = window.__MIGRATION.aid; // 旧ホストから引き継いだ匿名ID（このホストに未発行のときだけ採用）
+      localStorage.setItem(ANON_UID_STORAGE_KEY, id);
+    }
     if (!id) {
       id = (typeof crypto !== 'undefined' && crypto.randomUUID)
         ? crypto.randomUUID()
@@ -687,6 +764,7 @@ const ANON_UID = (function () {
 })();
 
 function track(name, params) {
+  if (window.__MIGRATION && window.__MIGRATION.redirecting) return; // 転送中の旧ホストでは何も送らない
   const data = Object.assign({
     embedded: IS_EMBEDDED ? 'yes' : 'no',
     embed_host: EMBED_ORIGIN ? EMBED_ORIGIN.replace(/^https?:\/\//, '') : '(none)',
@@ -705,6 +783,9 @@ function track(name, params) {
     } catch (e) {}
   }
 }
+
+// 旧ホスト(GitHub Pages)経由で来た訪問を1回だけ記録する（旧URLがまだ使われている量の把握用。不要になれば削除可）
+if (window.__MIGRATION && window.__MIGRATION.arrived) track('migrated_entry');
 
 // ── データ読み込み ──────────────────────────────────────────
 let FLOW = null;
